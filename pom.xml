@@ -21,6 +21,9 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<scm>
+		<connection>scm:git:git://github.com/gerisg/cipher-app.git</connection>
+	</scm>
 	<build>
 		<pluginManagement>
 			<plugins>
