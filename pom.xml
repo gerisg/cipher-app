@@ -21,9 +21,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<scm>
-		<connection>scm:git:git://github.com/gerisg/cipher-app.git</connection>
-	</scm>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -37,5 +34,17 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-	</build>
+    		<plugins>
+      			<plugin>
+        			<groupId>org.apache.maven.plugins</groupId>
+      				<artifactId>maven-release-plugin</artifactId>
+        			<version>2.4.2</version>
+      			</plugin>
+    		</plugins>
+	</build> 
+	<scm>
+		<connection>scm:git:git@github.com:gerisg/cipher-app.git</connection>
+		<url>scm:git:git@github.com:gerisg/cipher-app.git</url>
+		<developerConnection>scm:git:git@github.com:gerisg/cipher-app.git</developerConnection>
+  	</scm>
 </project>
