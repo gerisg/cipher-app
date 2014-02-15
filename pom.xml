@@ -3,7 +3,7 @@
 	<groupId>edu.udistrital.ing.sistemas</groupId>
 	<artifactId>cipher</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<name>Cipher</name>
 	<modules>
 		<module>commons-cipher</module>
@@ -46,6 +46,6 @@
 		<connection>scm:git:git@github.com:gerisg/cipher-app.git</connection>
 		<url>scm:git:git@github.com:gerisg/cipher-app.git</url>
 		<developerConnection>scm:git:git@github.com:gerisg/cipher-app.git</developerConnection>
-  	  <tag>cipher-1.0</tag>
+  	  <tag>HEAD</tag>
   </scm>
 </project>
