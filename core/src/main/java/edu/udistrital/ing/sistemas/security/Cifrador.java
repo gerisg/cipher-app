@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package edu.udistrital.ing.sistemas.security;
 
 import java.math.BigInteger;
@@ -11,31 +5,25 @@ import java.security.InvalidKeyException;
 
 import edu.udistrital.ing.sistemas.ICifrable;
 
-/*
+/**
  * @author wbejarano
  */
 public class Cifrador implements ICifrable {
 
-	private static Cifrador instance;
 	private ICifrable servicioCifrador;
+	private static Cifrador instance;
 
-	private Cifrador(ICifrable componenteCifrable) {
+	private Cifrador(ICifrable componenteCifrable, String seed) {
 		servicioCifrador = componenteCifrable;
+		init(seed);
 	}
 
 	public static Cifrador getInstance(ICifrable componenteCifrable, String seed) {
-		if (instance == null) {
-			instance = new Cifrador(componenteCifrable);
-			instance.init(seed);
-		} else {
-			instance.reloadCifrador(componenteCifrable, seed);
-		}
-		return instance;
-	}
 
-	private void reloadCifrador(ICifrable componenteCifrable, String seed) {
-		servicioCifrador = componenteCifrable;
-		instance.init(seed);
+		if (instance == null)
+			instance = new Cifrador(componenteCifrable, seed);
+
+		return instance;
 	}
 
 	@Override
@@ -44,8 +32,8 @@ public class Cifrador implements ICifrable {
 	}
 
 	@Override
-	public void init(String random_number) {
-		servicioCifrador.init(random_number);
+	public void init(String randomNumber) {
+		servicioCifrador.init(randomNumber);
 	}
 
 	@Override
@@ -59,13 +47,13 @@ public class Cifrador implements ICifrable {
 	}
 
 	@Override
-	public BigInteger decryptKey(BigInteger[] encryptedmsg) throws InvalidKeyException {
-		return servicioCifrador.decryptKey(encryptedmsg);
+	public BigInteger decryptKey(BigInteger[] encryptedMsg) throws InvalidKeyException {
+		return servicioCifrador.decryptKey(encryptedMsg);
 	}
 
 	@Override
-	public String decryptText(String encryptedmsg) throws InvalidKeyException {
-		return servicioCifrador.decryptText(encryptedmsg);
+	public String decryptText(String encryptedMsg) throws InvalidKeyException {
+		return servicioCifrador.decryptText(encryptedMsg);
 	}
 
 }

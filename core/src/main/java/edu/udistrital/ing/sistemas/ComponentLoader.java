@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.udistrital.ing.sistemas;
 
 import java.io.File;
@@ -17,7 +12,6 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 /**
- * 
  * @author wbejarano
  */
 public class ComponentLoader {
@@ -25,6 +19,7 @@ public class ComponentLoader {
 	private Map<String, IGenerable> generatorComponents;
 	private Map<String, ICifrable> cipherComponents;
 	private Map<String, IFirmable> signComponents;
+
 	private static final String componentPath = "components/";
 
 	public ComponentLoader() throws MalformedURLException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -32,28 +27,27 @@ public class ComponentLoader {
 	}
 
 	private void loadComponents() throws MalformedURLException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		
+
 		// HasMap para almacenar
 		generatorComponents = new HashMap<>();
 		cipherComponents = new HashMap<>();
 		signComponents = new HashMap<>();
 
 		File dir = new File(componentPath);
+
 		String[] ficheros = dir.list();
-		if (ficheros == null) {
+		if (ficheros == null)
 			System.out.println("No hay ficheros en el directorio especificado");
-		} else {
+
+		else {
 			for (String fichero : ficheros) {
+
 				// Extraemos la extensión
 				int dot = fichero.lastIndexOf(".");
 				String extension = fichero.substring(dot + 1);
-
 				if ("jar".equals(extension) || "JAR".equals(extension)) {
 
-					// System.out.println(fichero);
 					String jar = componentPath + fichero;
-					// Optenermos datos del jar
-					URL u = new File(jar).toURI().toURL();
 
 					// Verificamos el jar file
 					@SuppressWarnings("resource")
@@ -64,12 +58,14 @@ public class ComponentLoader {
 					// Obtenemos el nombre de la clase principal
 					String className = attrs.getValue("Main-Class");
 					// Obtenemos el nombre del tipo
-					String Implementation_type = attrs.getValue("Implementation-type");
+					String implementationType = attrs.getValue("Implementation-type");
 					// Nombre clave y único que sirve como identificador
 					String slugName = attrs.getValue("slug");
 
+					URL u = new File(jar).toURI().toURL();
 					URLClassLoader cl = new URLClassLoader(new URL[] { u });
-					switch (Implementation_type) {
+
+					switch (implementationType) {
 					case "generator":
 						generatorComponents.put(slugName, (IGenerable) Class.forName(className, true, cl).newInstance());
 						break;
