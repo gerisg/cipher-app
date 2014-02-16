@@ -18,11 +18,11 @@ import edu.udistrital.ing.sistemas.components.IComponent;
 import edu.udistrital.ing.sistemas.generator.acwa.GeneradorACWA;
 import edu.udistrital.ing.sistemas.signer.elgamal.ElgamalSigner;
 
-public class Application {
+public class Crypto {
 
 	Map<String, IComponent> components = new HashMap<>();
 
-	public Application() {
+	public Crypto() {
 		registerComponents();
 	}
 
@@ -85,7 +85,7 @@ public class Application {
 
 	public static void main(String[] args) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
 
-		Application app = new Application();
+		Crypto app = new Crypto();
 
 		app.generate("acwa-generator");
 		app.cipher("elgamal-cipher", "54654153459789879874564654");
