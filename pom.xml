@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.udistrital.ing.sistemas</groupId>
-	<artifactId>cipher</artifactId>
+	<artifactId>crypto</artifactId>
 	<packaging>pom</packaging>
 	<version>1.1-SNAPSHOT</version>
-	<name>Cipher</name>
+	<name>Crypto</name>
 	<modules>
-		<module>commons-cipher</module>
-		<module>commons-generator</module>
+		<module>elgamal-commons</module>
 		<module>elgamal-cipher</module>
+		<module>elgamal-signer</module>
 		<module>acwa-generator</module>
-		<module>core</module>
-		<module>desktop</module>
+		<module>crypto-core</module>
+		<module>crypto-commons</module>
 	</modules>
 	<dependencies>
 		<dependency>

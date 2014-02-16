@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>edu.udistrital.ing.sistemas</groupId>
-		<artifactId>cipher</artifactId>
+		<artifactId>crypto</artifactId>
 		<version>1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>acwa-generator</artifactId>
@@ -13,9 +13,24 @@
 	<dependencies>
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
-			<artifactId>commons-generator</artifactId>
+			<artifactId>crypto-commons</artifactId>
 			<version>1.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>edu.udistrital.ing.sistemas.generator.acwa.GeneradorACWA</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+    		</plugin>
+		</plugins>
+	</build>
 </project>
-

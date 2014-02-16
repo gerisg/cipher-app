@@ -104,11 +104,11 @@ public class WolframACWA {
 		return pattern;
 	}
 
-	public String imprimir(String pathFile) throws IOException {
+	public String imprimir(String path, String name) throws IOException {
+		
+		File archivo = File.createTempFile(path, name);
 
 		String fila;
-		File archivo = new File(pathFile);
-
 		try (PrintWriter grabador = new PrintWriter(archivo)) {
 			for (int x = 0; x < this.filas; x++) {
 				fila = "";

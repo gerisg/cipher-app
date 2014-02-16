@@ -23,15 +23,15 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import edu.udistrital.ing.sistemas.IGenerable;
+import edu.udistrital.ing.sistemas.components.Generable;
 
 /**
  * @author wbejarano
  */
-public class GeneradorACWA implements IGenerable {
+public class GeneradorACWA implements Generable {
 
-	private static final String PATH_FILE = "data/";
-	private static final String NAME_FILE = "secuenciaNumerosAleatorios.txt";
+	private static final String DIR = "data";
+	private static final String FILE = "secuenciaNumerosAleatorios.txt";
 
 	private int rows = 100;
 	private int columns = 100;
@@ -45,7 +45,7 @@ public class GeneradorACWA implements IGenerable {
 			// Inicializar matriz
 			WolframACWA wolframAc = new WolframACWA(this.rows, this.columns);
 			wolframAc.evolucionar();
-			absoluteRoute = wolframAc.imprimir(PATH_FILE + NAME_FILE);
+			absoluteRoute = wolframAc.imprimir(DIR, FILE);
 
 		} catch (IOException ex) {
 			Logger.getLogger(GeneradorACWA.class.getName()).log(Level.SEVERE, "Error imprimiendo secuencia.", ex);
