@@ -14,7 +14,6 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
- * 
  * @author wbejarano
  */
 public class WolframACWA {
@@ -22,24 +21,16 @@ public class WolframACWA {
 	private final int[][] matriz;
 	private final int filas;
 	private final int columnas;
-	private int neighborLeft;
-	private int neighborRight;
-	private File archivo;
 
-	public WolframACWA(int p_filas, int p_columnas) {
-		// Inicializacion de variables
-		this.filas = p_filas;
-		this.columnas = p_columnas;
+	public WolframACWA(int filas, int columnas) {
+		this.filas = filas;
+		this.columnas = columnas;
+		this.matriz = new int[this.filas + 1][this.columnas + 1];
 
-		// Creación de matriz
-		matriz = new int[this.filas + 1][this.columnas + 1];
-		// Inicialización de mattiz
-		this.populate();
-
+		populate();
 	}
 
 	private void populate() {
-
 		Random randomNum = new Random();
 		for (int x = 0; x <= this.filas; x++) {
 			for (int y = 0; y <= this.columnas; y++) {
@@ -49,6 +40,9 @@ public class WolframACWA {
 	}
 
 	public void evolucionar() {
+
+		int neighborLeft;
+		int neighborRight;
 
 		// filas
 		for (int x = 0; x <= this.filas; x++) {
@@ -81,11 +75,12 @@ public class WolframACWA {
 
 	private int aplicarRegla(int iz, int de, int cell) {
 
-		Random randomNum = new Random();
 		int pattern = 0;
+
+		Random randomNum = new Random();
 		switch (randomNum.nextInt(5)) {
 		case 0:
-			// Regla WA
+			// regla WA
 			pattern = (((iz ^ de) + (de * ~cell)) % 2);
 			break;
 		case 1:
@@ -95,34 +90,36 @@ public class WolframACWA {
 		case 2:
 			// regla 45
 			pattern = ((1 + iz + de + (cell * de)) % 2);
+			break;
 		case 3:
 			// regla 75
 			pattern = ((1 + iz + (cell * de)) % 2);
+			break;
 		case 4:
 			// regla 90
 			pattern = ((iz + de) % 2);
 			break;
 		}
+
 		return pattern;
 	}
 
-	public String imprimir(String p_path_file) throws IOException {
+	public String imprimir(String pathFile) throws IOException {
 
-		archivo = new File(p_path_file);
-		String fila = "";
+		String fila;
+		File archivo = new File(pathFile);
+
 		try (PrintWriter grabador = new PrintWriter(archivo)) {
-
 			for (int x = 0; x < this.filas; x++) {
 				fila = "";
-				for (int y = 0; y < this.columnas; y++) {
+				for (int y = 0; y < this.columnas; y++)
 					fila += matriz[x][y];
-				}
 				grabador.println(fila.replace("-", ""));
 			}
-
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
+
 		return archivo.getCanonicalPath();
 	}
 }

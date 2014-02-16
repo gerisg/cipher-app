@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.security.InvalidKeyException;
 
 /**
- * 
  * @author wbejarano
  */
 public interface ICifrable {

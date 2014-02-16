@@ -3,7 +3,9 @@ package edu.udistrital.ing.sistemas.cipher.elgamal.tools;
 import java.io.IOException;
 import java.math.BigInteger;
 
-//La clase utils se debe pasar al generador de números aleatorios
+/**
+ * La clase utils se debe pasar al generador de números aleatorios
+ */
 public class Utils {
 
 	/**
@@ -15,14 +17,13 @@ public class Utils {
 	 * @return the created process, of null upon exception
 	 */
 	public static Process runProcess(String command) {
+		Process p = null;
 		try {
-			return Runtime.getRuntime().exec(command);
+			p = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-		} finally {
-			// what you want
 		}
-		return null;
+		return p;
 	}
 
 	public static boolean isPrime(BigInteger n) {

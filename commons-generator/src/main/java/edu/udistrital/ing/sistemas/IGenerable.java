@@ -7,7 +7,6 @@
 package edu.udistrital.ing.sistemas;
 
 /**
- * 
  * @author wbejarano
  */
 public interface IGenerable {

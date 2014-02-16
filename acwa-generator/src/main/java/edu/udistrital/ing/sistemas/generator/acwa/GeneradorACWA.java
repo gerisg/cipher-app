@@ -26,36 +26,39 @@ import java.util.logging.Logger;
 import edu.udistrital.ing.sistemas.IGenerable;
 
 /**
- * 
  * @author wbejarano
  */
-public class generadorACWA implements IGenerable {
+public class GeneradorACWA implements IGenerable {
+
+	private static final String PATH_FILE = "data/";
+	private static final String NAME_FILE = "secuenciaNumerosAleatorios.txt";
 
 	private int rows = 100;
 	private int columns = 100;
-	private static final String path_to_file = "data/";
-	private static final String nombre_archivo = "secuenciaNumerosAleatorios.txt";
-	private String absolute_route;
+
+	private String absoluteRoute;
 
 	@Override
 	public void generarSecuenciasAleatorias() {
-		// inicializar matriz
-		WolframACWA wolframAc = new WolframACWA(this.rows, this.columns);
-		wolframAc.evolucionar();
 		try {
-			absolute_route = wolframAc.imprimir(path_to_file + nombre_archivo);
+
+			// Inicializar matriz
+			WolframACWA wolframAc = new WolframACWA(this.rows, this.columns);
+			wolframAc.evolucionar();
+			absoluteRoute = wolframAc.imprimir(PATH_FILE + NAME_FILE);
+
 		} catch (IOException ex) {
-			Logger.getLogger(generadorACWA.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(GeneradorACWA.class.getName()).log(Level.SEVERE, "Error imprimiendo secuencia.", ex);
 		}
 	}
 
 	@Override
 	public String getAbsoluteRoute() {
-		return absolute_route;
+		return absoluteRoute;
 	}
 
 	@Override
 	public String getNombre() {
-		return "Generardor ACWA";
+		return "Generador ACWA";
 	}
 }
