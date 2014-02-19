@@ -12,6 +12,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 import edu.udistrital.ing.sistemas.components.Generable;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.utils.RunProcess;
 
 /**
  * Este controlador conoce como trabajar con los componentes generadores
@@ -106,6 +107,10 @@ public class GeneratorController {
 		Integer[] values = (Integer[]) ArrayUtils.add(recursive, current);
 
 		return toInteger(bits.substring(32, bits.length()), values);
+	}
+
+	public void runTest() {
+		RunProcess.run("./assess", "1000", generator.getAbsoluteRoute(), "100");
 	}
 
 }

@@ -52,14 +52,11 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/crypto/sts</outputDirectory>
-							<nonFilteredFileExtensions>                            
-    							<nonFilteredFileExtension>sts</nonFilteredFileExtension>
-							</nonFilteredFileExtensions>
+							<outputDirectory>${basedir}/target/crypto/bin</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/resources/sts</directory>
-									<filtering>true</filtering>
+									<directory>src/main/resources/sts/</directory>
+									<filtering>false</filtering>
 								</resource>
 							</resources>
 						</configuration>
@@ -72,7 +69,6 @@
 				<version>1.7</version>
 				<configuration>
 					<assembleDirectory>${project.build.directory}/crypto</assembleDirectory>
-					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
 					<platforms>
 						<platform>unix</platform>
 					</platforms>

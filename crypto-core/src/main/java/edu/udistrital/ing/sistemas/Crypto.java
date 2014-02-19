@@ -17,7 +17,7 @@ import edu.udistrital.ing.sistemas.controller.CipherController;
 import edu.udistrital.ing.sistemas.controller.GeneratorController;
 import edu.udistrital.ing.sistemas.controller.SignerController;
 import edu.udistrital.ing.sistemas.generator.acwa.GeneradorACWA;
-import edu.udistrital.ing.sistemas.gui.AnalyzeGUI;
+import edu.udistrital.ing.sistemas.gui.AnalyzerGUI;
 import edu.udistrital.ing.sistemas.gui.CryptoGUI;
 import edu.udistrital.ing.sistemas.gui.GeneratorGUI;
 import edu.udistrital.ing.sistemas.signer.elgamal.ElgamalSigner;
@@ -73,12 +73,12 @@ public class Crypto {
 	}
 
 	private void addComponentToPane(Container pane) {
-		JTabbedPane tabbedPane = new JTabbedPane();
+		final JTabbedPane tabbedPane = new JTabbedPane();
 
 		GeneratorGUI generatorGUI = new GeneratorGUI(generatorController);
 		tabbedPane.addTab("Generar", generatorGUI.createComponent());
 
-		AnalyzeGUI analyzeGUI = new AnalyzeGUI();
+		AnalyzerGUI analyzeGUI = new AnalyzerGUI(generatorController);
 		tabbedPane.addTab("Analizar", analyzeGUI.createComponent());
 
 		CryptoGUI cryptoGUI = new CryptoGUI(cipherController, signerController);
