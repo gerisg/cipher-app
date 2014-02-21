@@ -20,8 +20,6 @@ public class RunProcess {
 			while ((line = br.readLine()) != null)
 				System.out.println(line);
 
-			System.out.println("Exit code: " + process.exitValue());
-
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}

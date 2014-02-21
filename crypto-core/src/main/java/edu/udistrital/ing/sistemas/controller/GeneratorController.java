@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,6 +13,8 @@ import org.apache.commons.lang.ArrayUtils;
 
 import edu.udistrital.ing.sistemas.components.Generable;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.gui.AnalyzerGUI;
+import edu.udistrital.ing.sistemas.sts.STSTest;
 import edu.udistrital.ing.sistemas.utils.RunProcess;
 
 /**
@@ -109,8 +112,20 @@ public class GeneratorController {
 		return toInteger(bits.substring(32, bits.length()), values);
 	}
 
-	public void runTest() {
-		RunProcess.run("./assess", "1000", generator.getAbsoluteRoute(), "100");
+	// TODO Extraer a otro controller
+	public void runTest(String bits, String lines) {
+		RunProcess.run("./assess", bits, generator.getAbsoluteRoute(), lines);
+	}
+
+	// TODO Extraer a otro controller
+	public Map<String, List<String>> getResults() {
+
+		Map<String, List<String>> results = new HashMap<>();
+
+		for (String name : AnalyzerGUI.TESTS_NAME)
+			results.put(name, STSTest.parseResult(name));
+
+		return results;
 	}
 
 }
