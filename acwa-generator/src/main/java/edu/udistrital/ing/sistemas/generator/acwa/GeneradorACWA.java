@@ -33,17 +33,14 @@ public class GeneradorACWA implements Generable {
 	private static final String DIR = "data";
 	private static final String FILE = "secuenciaNumerosAleatorios.txt";
 
-	private int rows = 100;
-	private int columns = 1000;
-
 	private String absoluteRoute;
 
 	@Override
-	public void generarSecuenciasAleatorias() {
+	public void generarSecuenciasAleatorias(int rows, int columns) {
 		try {
 
 			// Inicializar matriz
-			WolframACWA wolframAc = new WolframACWA(this.rows, this.columns);
+			WolframACWA wolframAc = new WolframACWA(rows, columns);
 			wolframAc.evolucionar();
 			absoluteRoute = wolframAc.imprimir(DIR, FILE);
 

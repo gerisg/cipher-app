@@ -5,8 +5,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * Herramienta para la ejecución de procesos externos.
+ * 
+ * @author ggallardo
+ * 
+ */
 public class RunProcess {
 
+	/**
+	 * El primer argumento es el comando a ejecutar y los siguientes son
+	 * parámetros de la misma
+	 */
 	public static void run(String... args) {
 
 		try {
@@ -21,7 +31,7 @@ public class RunProcess {
 				System.out.println(line);
 
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
+			System.out.println(e.getMessage());
 		}
 	}
 

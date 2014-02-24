@@ -2,7 +2,7 @@ package edu.udistrital.ing.sistemas;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,11 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import edu.udistrital.ing.sistemas.cipher.elgamal.ElgamalCipher;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.controller.ChainsController;
 import edu.udistrital.ing.sistemas.controller.CipherController;
-import edu.udistrital.ing.sistemas.controller.GeneratorController;
 import edu.udistrital.ing.sistemas.controller.SignerController;
 import edu.udistrital.ing.sistemas.generator.acwa.GeneradorACWA;
 import edu.udistrital.ing.sistemas.gui.AnalyzerGUI;
@@ -22,18 +24,27 @@ import edu.udistrital.ing.sistemas.gui.CryptoGUI;
 import edu.udistrital.ing.sistemas.gui.GeneratorGUI;
 import edu.udistrital.ing.sistemas.signer.elgamal.ElgamalSigner;
 
+/**
+ * Clase principal de la aplicación "Crypto", esta se encarga de: <br />
+ * - Instanciar los controladores <br />
+ * - Mantener la lista de componentes <br />
+ * - Inicializar la GUI <br />
+ * 
+ * @author ggallardo
+ * 
+ */
 public class Crypto {
 
 	private final static String LOOKANDFEEL = ""; // System,Motif,GTK+,Metal
 
-	private GeneratorController generatorController;
+	private ChainsController generatorController;
 	private CipherController cipherController;
 	private SignerController signerController;
 
 	private Crypto() {
 		Map<String, IComponent> components = registerComponents();
 
-		generatorController = new GeneratorController(components);
+		generatorController = new ChainsController(components);
 		cipherController = new CipherController(components);
 		signerController = new SignerController(components);
 	}
@@ -68,21 +79,50 @@ public class Crypto {
 
 		// Show GUI
 		frame.pack();
-		frame.setMinimumSize(new Dimension(1200, 400));
 		frame.setVisible(true);
+		frame.setExtendedState(frame.getExtendedState() | JFrame.NORMAL);
 	}
 
+	/**
+	 * Se agrega cada una de las UIs al panel principal. Cada UI posee un
+	 * tabpanel que la representa.
+	 */
 	private void addComponentToPane(Container pane) {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 
-		GeneratorGUI generatorGUI = new GeneratorGUI(generatorController);
+		final GeneratorGUI generatorGUI = new GeneratorGUI(generatorController);
 		tabbedPane.addTab("Generar", generatorGUI.createComponent());
+		tabbedPane.setEnabledAt(0, true);
+		generatorGUI.setTabPanel(tabbedPane);
 
-		AnalyzerGUI analyzeGUI = new AnalyzerGUI(generatorController);
+		final AnalyzerGUI analyzeGUI = new AnalyzerGUI(generatorController);
 		tabbedPane.addTab("Analizar", analyzeGUI.createComponent());
+		tabbedPane.setEnabledAt(1, false);
+		analyzeGUI.setTabPanel(tabbedPane);
 
-		CryptoGUI cryptoGUI = new CryptoGUI(cipherController, signerController);
+		final CryptoGUI cryptoGUI = new CryptoGUI(cipherController, signerController);
 		tabbedPane.addTab("Cifrar", cryptoGUI.createComponent());
+		tabbedPane.setEnabledAt(2, false);
+		cryptoGUI.setTabPanel(tabbedPane);
+
+		// Listener que inicia tareas a realizarse en los cambios de tabs
+		ChangeListener changeListener = new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+				switch (sourceTabbedPane.getSelectedIndex()) {
+				case 0:
+					generatorGUI.actionPerformed(new ActionEvent(new Object(), 0, "change_tab"));
+					break;
+				case 1:
+					analyzeGUI.actionPerformed(new ActionEvent(new Object(), 0, "change_tab"));
+					break;
+				case 2:
+					cryptoGUI.actionPerformed(new ActionEvent(generatorController.getChain(), 0, "change_tab"));
+					break;
+				}
+			}
+		};
+		tabbedPane.addChangeListener(changeListener);
 
 		pane.add(tabbedPane, BorderLayout.CENTER);
 	}
@@ -109,18 +149,20 @@ public class Crypto {
 		}
 
 		try {
+
 			UIManager.setLookAndFeel(lookAndFeel);
 
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-			System.err.println("No pude obtener la apariencia especificada (" + lookAndFeel + "), por alguna razon.");
-			System.err.println("Usando la apariencia predeterminada.");
+			System.out.println("No pude obtener la apariencia especificada (" + lookAndFeel + "), por alguna razon.");
+			System.out.println("Usando la apariencia predeterminada.");
 		}
 	}
 
-	public GeneratorController getGeneratorController() {
+	public ChainsController getGeneratorController() {
 		return generatorController;
 	}
 
+	// Acá empieza todo...
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -128,5 +170,4 @@ public class Crypto {
 			}
 		});
 	}
-
 }

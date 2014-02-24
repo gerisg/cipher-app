@@ -1,4 +1,4 @@
-package edu.udistrital.ing.sistemas.sts;
+package edu.udistrital.ing.sistemas.sts.parsers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,29 +7,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class STSParser {
+/**
+ * Los resultados de OverlapingTemplate no poseen valores para la variable
+ * pValue, entonces para mantener la misma línea en la GUI, se devuelve en la
+ * respuesta un 1 para los SUCCESS y 0 para los FAILURE.
+ */
+public class OverlappingTemplateParser extends CommonParser {
 
-	static final String TEST_RESULTS_DIR = "./experiments/AlgorithmTesting/";
-	static final String TEST_RESULTS_FILE = "stats.txt";
-
-	static final String SUCCESS = "SUCCESS";
-	static final String FAILURE = "FAILURE";
-
+	@Override
 	public List<String> parseResults(String name) {
 		List<String> results = new ArrayList<>();
 
 		File stats = new File(TEST_RESULTS_DIR + name, TEST_RESULTS_FILE);
-		System.out.println(stats.getAbsolutePath());
 		if (stats.exists()) {
 
 			try (BufferedReader br = new BufferedReader(new FileReader(stats))) {
 
 				String line;
-				while ((line = br.readLine()) != null)
+				while ((line = br.readLine()) != null) {
+
 					if (line.contains(SUCCESS))
-						results.add(SUCCESS);
+						results.add(new String("1"));
+
 					else if (line.contains(FAILURE))
-						results.add(FAILURE);
+						results.add(new String("0"));
+				}
 
 			} catch (IOException e) {
 				System.err.println(e.getMessage());

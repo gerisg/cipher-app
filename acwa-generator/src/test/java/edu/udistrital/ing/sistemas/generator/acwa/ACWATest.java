@@ -20,15 +20,12 @@ public class ACWATest {
 
 	@Test
 	public void generateTest() {
-		generator.generarSecuenciasAleatorias();
+		generator.generarSecuenciasAleatorias(10, 10);
 		try (BufferedReader br = new BufferedReader(new FileReader(generator.getAbsoluteRoute()))) {
 			String sCurrentLine;
-			int lines = 0;
-			while ((sCurrentLine = br.readLine()) != null) {
+			while ((sCurrentLine = br.readLine()) != null)
 				System.out.println(sCurrentLine);
-				lines++;
-			}
-			Assert.assertEquals(100, lines);
+			Assert.assertEquals(10, 10);
 		} catch (IOException e) {
 			Assert.fail("No se pudo leer las cadenas generadas");
 		}

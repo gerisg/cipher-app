@@ -25,7 +25,7 @@ public class WolframACWA {
 	public WolframACWA(int filas, int columnas) {
 		this.filas = filas;
 		this.columnas = columnas;
-		this.matriz = new int[this.filas + 1][this.columnas + 1];
+		this.matriz = new int[filas + 1][columnas + 1];
 
 		populate();
 	}
@@ -52,7 +52,7 @@ public class WolframACWA {
 				// Se seleccionan los vecinos de la célula según posición
 				if (y == 0) {
 					// Si la celula está en la primera columna
-					neighborLeft = x;
+					neighborLeft = y;
 					neighborRight = y + 1;
 				} else if (y == x) {
 					// Si la célula es ella misma
@@ -68,7 +68,11 @@ public class WolframACWA {
 					neighborRight = y + 1;
 				}
 
-				matriz[x][y] = aplicarRegla(matriz[x][neighborLeft], matriz[x][neighborRight], matriz[x][y]);
+				int a = matriz[x][neighborLeft];
+				int b = matriz[x][neighborRight];
+				int c = matriz[x][y];
+
+				matriz[x][y] = aplicarRegla(a, b, c);
 			}
 		}
 	}
@@ -105,7 +109,7 @@ public class WolframACWA {
 	}
 
 	public String imprimir(String path, String name) throws IOException {
-		
+
 		File archivo = File.createTempFile(path, name);
 
 		String fila;
@@ -122,4 +126,5 @@ public class WolframACWA {
 
 		return archivo.getCanonicalPath();
 	}
+
 }
