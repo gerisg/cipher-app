@@ -192,7 +192,6 @@ public class GeneratorGUI extends Frame implements ActionListener {
 
 		// Rebuild table
 		Vector<Vector<String>> data = ChainsUtils.buildVectorData(controller.getChains());
-		resultsModelTbl = new DefaultTableModel(data, columnNames);
 
 		// Data
 		resultsModelTbl.setDataVector(data, columnNames);

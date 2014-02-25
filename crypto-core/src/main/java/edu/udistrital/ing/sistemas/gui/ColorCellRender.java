@@ -2,6 +2,7 @@ package edu.udistrital.ing.sistemas.gui;
 
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -13,9 +14,16 @@ public class ColorCellRender extends DefaultTableCellRenderer {
 	private AnalyzerGUI analyzerGUI;
 	private JLabel label;
 
+	private ImageIcon successIcon;
+	private ImageIcon failureIcon;
+
 	public ColorCellRender(AnalyzerGUI analyzerGUI) {
+
 		this.analyzerGUI = analyzerGUI;
+
 		this.label = new JLabel();
+		this.successIcon = new ImageIcon(ClassLoader.getSystemResource("img/success.png"));
+		this.failureIcon = new ImageIcon(ClassLoader.getSystemResource("img/failure.png"));
 	}
 
 	@Override
@@ -27,12 +35,12 @@ public class ColorCellRender extends DefaultTableCellRenderer {
 			return component;
 
 		if (value.equals("SUCCESS")) {
-			label.setIcon(analyzerGUI.successIcon);
+			label.setIcon(successIcon);
 			analyzerGUI.results = label;
 		}
 
 		else if (value.equals("FAILURE")) {
-			label.setIcon(analyzerGUI.failureIcon);
+			label.setIcon(failureIcon);
 			analyzerGUI.results = label;
 		}
 

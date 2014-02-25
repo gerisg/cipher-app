@@ -276,6 +276,7 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			Object cipher = e.getSource();
 			if (cipher instanceof JComboBox<?>) {
+				
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) cipher;
 				cipherController.select((String) cb.getSelectedItem());
@@ -289,6 +290,7 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			Object signer = e.getSource();
 			if (signer instanceof JComboBox<?>) {
+				
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) signer;
 				signerController.select((String) cb.getSelectedItem());

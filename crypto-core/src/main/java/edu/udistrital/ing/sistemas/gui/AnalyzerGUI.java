@@ -1,63 +1,44 @@
 package edu.udistrital.ing.sistemas.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import edu.udistrital.ing.sistemas.controller.ChainsController;
-import edu.udistrital.ing.sistemas.sts.STSTest;
+import edu.udistrital.ing.sistemas.utils.TestsUtils;
 
 public class AnalyzerGUI extends Frame implements ActionListener {
 
 	private static final long serialVersionUID = -9016052817791749651L;
+	private static Vector<String> columnNames;
 
-	private static final String[] COLUMNS = new String[] { "Id", //
-			"ApproximateEntropy", //
-			"CumulativeSums",//
-			"Frequency", //
-			"LongestRun", //
-			"OverlappingTemplate", //
-			"RandomExcursionsVariant", //
-			"Runs", //
-			"Universal", //
-			"BlockFrequency", //
-			"FFT", //
-			"LinearComplexity", //
-			"NonOverlappingTemplate", //
-			"RandomExcursions", //
-			"Rank", //
-			"Serial", //
-			"" };
-
-	private static final Double ALPHA = new Double(0.01);
-
-	private DefaultTableModel testsModelTbl;
+	public JLabel results;
 	protected JTable testsTbl;
-	private JTabbedPane tabPanel;
 	private TableCellRenderer color;
-	protected ImageIcon successIcon;
-	protected ImageIcon failureIcon;
-	protected JLabel results;
-	protected JLabel selectedTitle;
-	protected JLabel selectedChain;
+	private JTabbedPane tabPanel;
+	private DefaultTableModel testsModelTbl;
+	private JTextArea selectedChain;
+	private JTextArea messageArea;
 	private JButton okBtn;
 
 	private ChainsController controller;
@@ -68,43 +49,80 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 
 	public Component createComponent() {
 
-		JPanel pane = new JPanel() {
+		// ColumnNames
+		columnNames = new Vector<String>();
+		columnNames.add("Id");
+		columnNames.add("ApproximateEntropy");
+		columnNames.add("CumulativeSums");
+		columnNames.add("Frequency");
+		columnNames.add("LongestRun");
+		columnNames.add("OverlappingTemplate");
+		columnNames.add("RandomExcursionsVariant");
+		columnNames.add("Runs");
+		columnNames.add("Universal");
+		columnNames.add("BlockFrequency");
+		columnNames.add("FFT");
+		columnNames.add("LinearComplexity");
+		columnNames.add("NonOverlappingTemplate");
+		columnNames.add("RandomExcursions");
+		columnNames.add("Rank");
+		columnNames.add("Serial");
+		columnNames.add("Result");
 
-			private static final long serialVersionUID = 1L;
+		// Icon and colors to table results
+		color = new ColorCellRender(this);
 
-			public Dimension getPreferredSize() {
-				Dimension size = super.getPreferredSize();
-				size.width += 200;
-				return size;
-			}
-		};
-		pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
-
-		selectedTitle = new JLabel("Cadena seleccionada: ");
-		pane.add(selectedTitle);
-
-		selectedChain = new JLabel();
-		pane.add(selectedChain);
+		// Top bar components
+		selectedChain = new JTextArea(10, 10);
+		selectedChain.setEditable(false);
+		selectedChain.setLineWrap(true);
+		JScrollPane selectedChainScrollPane = new JScrollPane(selectedChain);
+		selectedChainScrollPane.setPreferredSize(new Dimension(800, 100));
+		selectedChainScrollPane.setMaximumSize(new Dimension(1000, 100));
 
 		okBtn = new JButton("OK");
 		okBtn.setActionCommand("use_chain");
 		okBtn.addActionListener(this);
 		okBtn.setEnabled(false);
-		pane.add(okBtn);
 
-		// Table
-		// Colums: id, tests (15), results, select
-		testsModelTbl = new DefaultTableModel(new Object[1][18], COLUMNS);
+		// Top bar pane
+		JPanel topBarPane = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		topBarPane.add(new JLabel("Cadena seleccionada: "));
+		topBarPane.add(selectedChainScrollPane);
+		topBarPane.add(okBtn);
+
+		// Test results components
+		testsModelTbl = new DefaultTableModel(columnNames, 0);
 		testsTbl = new JTable(testsModelTbl);
 		JScrollPane scrollPane = new JScrollPane(testsTbl);
-		pane.add(scrollPane);
+		scrollPane.setPreferredSize(new Dimension(1200, 600));
+		scrollPane.setMaximumSize(new Dimension(1550, 600));
 
-		color = new ColorCellRender(this);
+		// Test results pane
+		JPanel testResultsPane = new JPanel();
+		testResultsPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		testResultsPane.add(scrollPane);
 
-		successIcon = new ImageIcon(ClassLoader.getSystemResource("img/success.png"));
-		failureIcon = new ImageIcon(ClassLoader.getSystemResource("img/failure.png"));
+		// Test errors components
+		messageArea = new JTextArea(10, 10);
+		messageArea.setEditable(false);
+		messageArea.setLineWrap(true);
+		JScrollPane messagesScrollPane = new JScrollPane(messageArea);
+		messagesScrollPane.setPreferredSize(new Dimension(800, 50));
+		messagesScrollPane.setMaximumSize(new Dimension(1000, 50));
 
-		results = new JLabel();
+		// Test errors pane
+		JPanel testErrorsPane = new JPanel();
+		testErrorsPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		testErrorsPane.add(new JLabel("Errors and Warnings: "));
+		testErrorsPane.add(messagesScrollPane);
+
+		// Main pane
+		JPanel pane = new JPanel();
+		pane.setLayout(new BorderLayout(5, 5));
+		pane.add(topBarPane, BorderLayout.NORTH);
+		pane.add(testResultsPane, BorderLayout.CENTER);
+		pane.add(testErrorsPane, BorderLayout.SOUTH);
 
 		return pane;
 	}
@@ -113,54 +131,9 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		switch (e.getActionCommand()) {
+
 		case "change_tab":
-
-			Map<String, List<String>> results = controller.getResults();
-
-			// Matriz
-			// id | test1 .. test15 | results | select
-			testsModelTbl = new DefaultTableModel(new Object[GeneratorGUI.rows + 1][COLUMNS.length], COLUMNS);
-
-			// Complete Tests Columns
-			for (int column = 1; column < COLUMNS.length - 2; column++) {
-				String name = COLUMNS[column];
-				List<String> list = results.get(name);
-				if (list.isEmpty()) // Last row
-					testsModelTbl.setValueAt(STSTest.parsers.get(name).getMessage(), GeneratorGUI.rows, column);
-				else
-					for (int row = 0; row < GeneratorGUI.rows; row++)
-						testsModelTbl.setValueAt(list.get(row), row, column);
-			}
-
-			for (int row = 0; row < GeneratorGUI.rows; row++) {
-
-				// Complete ID Column
-				testsModelTbl.setValueAt(row + 1, row, 0);
-
-				// Complete Results Column
-				@SuppressWarnings("unchecked")
-				String result = calculateRowResult((Vector<String>) testsModelTbl.getDataVector().elementAt(row));
-				testsModelTbl.setValueAt(result, row, 16);
-			}
-
-			testsTbl.setModel(testsModelTbl);
-			testsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			testsTbl.setPreferredScrollableViewportSize(new Dimension(testsTbl.getColumnCount() * 100, testsTbl.getRowHeight() * 16));
-
-			testsTbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					int index = e.getFirstIndex();
-					controller.setChain(index);
-					selectedChain.setText(controller.getChain());
-					okBtn.setEnabled(true);
-				}
-			});
-
-			testsTbl.getColumnModel().getColumn(16).setCellRenderer(color);
-
-			testsModelTbl.fireTableDataChanged();
-
+			showTestResults(controller.getResults());
 			break;
 
 		case "use_chain":
@@ -169,20 +142,43 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		}
 	}
 
-	private String calculateRowResult(Vector<String> rowVector) {
-		// Sólo las columnas que tienen tests
-		for (int i = 1; i < rowVector.size() - 2; i++)
-			try {
+	private void showTestResults(Map<String, List<String>> results) {
 
-				if (Double.valueOf(rowVector.elementAt(i)) < ALPHA)
-					return "FAILURE";
+		TestsUtils testUtils = new TestsUtils();
+		testUtils.buildVectors(results);
 
-			} catch (Exception e) {
-				// Son tests que no se generaron
-				System.out.println(e.getMessage());
+		Vector<Vector<String>> data = testUtils.getData();
+		Vector<String> columns = testUtils.getColumnNames();
+
+		// Errors Message
+		StringBuilder message = new StringBuilder();
+		Map<String, String> errors = testUtils.getErrors();
+		for (Entry<String, String> e : errors.entrySet())
+			message.append("\nTest: " + e.getKey() + "\nMessage: " + e.getValue() + "\n");
+		messageArea.setText(message.toString());
+
+		// Data
+		testsModelTbl.setDataVector(data, columns);
+
+		// Table
+		testsTbl.setModel(testsModelTbl);
+		testsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		testsTbl.getColumnModel().getColumn(columns.size() - 1).setCellRenderer(color);
+		testsTbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				// Save chain selected on table
+				controller.setChain(e.getFirstIndex());
+
+				// Show chain selected
+				selectedChain.setText(controller.getChain());
+
+				// Enable OK button
+				okBtn.setEnabled(true);
 			}
-
-		return "SUCCESS";
+		});
 	}
 
 	private void goNextTab() {
@@ -195,4 +191,5 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 	public void setTabPanel(JTabbedPane tabbedPane) {
 		this.tabPanel = tabbedPane;
 	}
+
 }
