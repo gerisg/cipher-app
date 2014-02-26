@@ -35,8 +35,6 @@ public class ElgamalSigner implements Firmable {
 
 	public byte[] signKey(String str) throws InvalidKeyException, SignatureException {
 
-		System.out.println("Message : " + str);
-
 		esign = new ElGamalSignature();
 		esign.engineInitSign(eprik);
 
@@ -46,15 +44,18 @@ public class ElgamalSigner implements Firmable {
 		return esign.engineSign();
 	}
 
-	public boolean signVerify(byte[] signedb, String mensaje) throws InvalidKeyException, SignatureException {
+	public String signVerify(byte[] signedb, String mensaje) throws InvalidKeyException, SignatureException {
 
 		String hashDecryptStr = MD5.md5(mensaje);
-		System.out.println("Hashed decrypted message: " + hashDecryptStr);
 
 		esign.engineInitVerify(epubk);
 		esign.engineUpdate(hashDecryptStr.getBytes(), 0, hashDecryptStr.length());
 
-		return esign.engineVerify(signedb);
+		boolean engineVerify = esign.engineVerify(signedb);
+		if (engineVerify)
+			return hashDecryptStr;
+
+		return "INVALID SIGNATURE";
 	}
 
 	public String getName() {

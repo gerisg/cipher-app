@@ -30,7 +30,6 @@ import edu.udistrital.ing.sistemas.utils.TestsUtils;
 public class AnalyzerGUI extends Frame implements ActionListener {
 
 	private static final long serialVersionUID = -9016052817791749651L;
-	private static Vector<String> columnNames;
 
 	public JLabel results;
 	protected JTable testsTbl;
@@ -49,26 +48,6 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 
 	public Component createComponent() {
 
-		// ColumnNames
-		columnNames = new Vector<String>();
-		columnNames.add("Id");
-		columnNames.add("ApproximateEntropy");
-		columnNames.add("CumulativeSums");
-		columnNames.add("Frequency");
-		columnNames.add("LongestRun");
-		columnNames.add("OverlappingTemplate");
-		columnNames.add("RandomExcursionsVariant");
-		columnNames.add("Runs");
-		columnNames.add("Universal");
-		columnNames.add("BlockFrequency");
-		columnNames.add("FFT");
-		columnNames.add("LinearComplexity");
-		columnNames.add("NonOverlappingTemplate");
-		columnNames.add("RandomExcursions");
-		columnNames.add("Rank");
-		columnNames.add("Serial");
-		columnNames.add("Result");
-
 		// Icon and colors to table results
 		color = new ColorCellRender(this);
 
@@ -77,8 +56,7 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		selectedChain.setEditable(false);
 		selectedChain.setLineWrap(true);
 		JScrollPane selectedChainScrollPane = new JScrollPane(selectedChain);
-		selectedChainScrollPane.setPreferredSize(new Dimension(800, 100));
-		selectedChainScrollPane.setMaximumSize(new Dimension(1000, 100));
+		selectedChainScrollPane.setPreferredSize(new Dimension(500, 80));
 
 		okBtn = new JButton("OK");
 		okBtn.setActionCommand("use_chain");
@@ -92,11 +70,10 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		topBarPane.add(okBtn);
 
 		// Test results components
-		testsModelTbl = new DefaultTableModel(columnNames, 0);
+		testsModelTbl = new DefaultTableModel();
 		testsTbl = new JTable(testsModelTbl);
-		JScrollPane scrollPane = new JScrollPane(testsTbl);
-		scrollPane.setPreferredSize(new Dimension(1200, 600));
-		scrollPane.setMaximumSize(new Dimension(1550, 600));
+		JScrollPane scrollPane = new JScrollPane(testsTbl, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension(780, 350));
 
 		// Test results pane
 		JPanel testResultsPane = new JPanel();
@@ -108,8 +85,7 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		messageArea.setEditable(false);
 		messageArea.setLineWrap(true);
 		JScrollPane messagesScrollPane = new JScrollPane(messageArea);
-		messagesScrollPane.setPreferredSize(new Dimension(800, 50));
-		messagesScrollPane.setMaximumSize(new Dimension(1000, 50));
+		messagesScrollPane.setPreferredSize(new Dimension(500, 80));
 
 		// Test errors pane
 		JPanel testErrorsPane = new JPanel();
@@ -133,6 +109,11 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		switch (e.getActionCommand()) {
 
 		case "change_tab":
+
+			// Clean chain
+			selectedChain.setText("");
+			controller.removeChain();
+
 			showTestResults(controller.getResults());
 			break;
 

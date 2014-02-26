@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.InvalidKeyException;
 import java.security.SignatureException;
+import java.util.Arrays;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,7 +34,11 @@ public class CryptoGUI extends Frame implements ActionListener {
 	private CipherController cipherController;
 	private SignerController signerController;
 
-	private JTextField cField;
+	private JLabel gField;
+	private JLabel publicField;
+	private JLabel privateField;
+	private JLabel modulePField;
+	private JLabel randomKField;
 	private JButton cipherBtn;
 	private JButton unCipherBtn;
 	private JButton signBtn;
@@ -62,36 +67,60 @@ public class CryptoGUI extends Frame implements ActionListener {
 		cipherList.setActionCommand("select_cipher");
 		cipherList.addActionListener(this);
 
-		JTextField pField = new JTextField();
-		pField.addActionListener(this);
-		pField.setText("     ");
-		pField.setEditable(false);
-
-		JTextField qField = new JTextField();
-		qField.addActionListener(this);
-		qField.setText("     ");
-		qField.setEditable(false);
-
-		cField = new JTextField();
-		cField.addActionListener(this);
-		cField.setEditable(false);
-
-		// Options pane
-		JPanel optionsPane = new JPanel();
-		optionsPane.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20));
-		optionsPane.add(new JLabel("Cifrador: "));
-		optionsPane.add(cipherList);
-		optionsPane.add(new JLabel("P: "));
-		optionsPane.add(pField);
-		optionsPane.add(new JLabel("Q: "));
-		optionsPane.add(qField);
-		optionsPane.add(new JLabel("C: "));
-		optionsPane.add(cField);
+		publicField = new JLabel();
+		privateField = new JLabel();
+		modulePField = new JLabel();
+		randomKField = new JLabel();
+		gField = new JLabel();
+		gField.setPreferredSize(new Dimension(1000, 10));
 
 		// Top bar pane
+		JPanel selectCipherPane = new JPanel();
+		selectCipherPane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		selectCipherPane.add(new JLabel("Cifrador: "));
+		selectCipherPane.add(cipherList);
+
+		JPanel pubKPane = new JPanel();
+		pubKPane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		pubKPane.add(new JLabel("Public key: "));
+		pubKPane.add(publicField);
+
+		JPanel prvKPane = new JPanel();
+		prvKPane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		prvKPane.add(new JLabel("Private key: "));
+		prvKPane.add(privateField);
+
+		JPanel pPane = new JPanel();
+		pPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		pPane.add(new JLabel("P: "));
+		pPane.add(modulePField);
+
+		JPanel kPane = new JPanel();
+		kPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		kPane.add(new JLabel("K: "));
+		kPane.add(randomKField);
+
+		JPanel keysPane = new JPanel();
+		keysPane.setLayout(new BoxLayout(keysPane, BoxLayout.Y_AXIS));
+		keysPane.add(pubKPane);
+		keysPane.add(prvKPane);
+
+		JPanel varsPane = new JPanel();
+		varsPane.setLayout(new BoxLayout(varsPane, BoxLayout.Y_AXIS));
+		varsPane.add(pPane);
+		varsPane.add(kPane);
+
+		JPanel generatePane = new JPanel();
+		generatePane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		generatePane.add(new JLabel("G: "));
+		generatePane.add(gField);
+
 		JPanel topBarPane = new JPanel();
-		topBarPane.setLayout(new BoxLayout(topBarPane, BoxLayout.Y_AXIS));
-		topBarPane.add(optionsPane);
+		topBarPane.setLayout(new BorderLayout(5, 5));
+		topBarPane.add(selectCipherPane, BorderLayout.NORTH);
+		topBarPane.add(keysPane, BorderLayout.EAST);
+		topBarPane.add(varsPane, BorderLayout.WEST);
+		topBarPane.add(generatePane, BorderLayout.SOUTH);
 
 		// Cipher bar components
 		cipherBtn = new JButton("Cifrar");
@@ -171,7 +200,8 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 		// Bottom pane
 		JPanel bottomBarPane = new JPanel();
-		bottomBarPane.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+		bottomBarPane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		bottomBarPane.add(new JLabel("Firmador: "));
 		bottomBarPane.add(signerList);
 		bottomBarPane.add(signBtn);
 		bottomBarPane.add(verifyBtn);
@@ -198,9 +228,8 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			// Guarda la cadena seleccionada
 			String chainSelected = (String) e.getSource();
-			cField.setText(chainSelected);
-
-			System.out.println(chainSelected);
+			gField.setText(chainSelected);
+			gField.setVisible(true);
 
 			break;
 
@@ -247,11 +276,10 @@ public class CryptoGUI extends Frame implements ActionListener {
 				verifyBtn.setEnabled(true);
 
 				dialog = new JDialog();
-				dialog.setTitle("Signature");
-				dialog.add(new JLabel("Firma del mensaje: "));
-				dialog.add(new JTextField(new String(signature)));
-				dialog.setSize(200, 200);
-				dialog.setLocationRelativeTo(verifyBtn);
+				dialog.setTitle("Firma generada");
+				dialog.add(new JTextField("Firma: " + Arrays.toString(signature)));
+				dialog.setSize(500, 100);
+				dialog.setLocationRelativeTo(cipherArea); // Middle screen
 				dialog.setVisible(true);
 
 			} catch (InvalidKeyException | SignatureException e1) {
@@ -263,8 +291,15 @@ public class CryptoGUI extends Frame implements ActionListener {
 		case "verify":
 			try {
 
-				// TODO show verify!
-				signerController.verify(signature, decryptedText);
+				// Verificar
+				String hash = signerController.verify(signature, decryptedText);
+
+				dialog = new JDialog();
+				dialog.setTitle("Firma verificada");
+				dialog.add(new JTextField(new String("Hash: " + hash)));
+				dialog.setSize(500, 100);
+				dialog.setLocationRelativeTo(cipherArea); // Middle screen
+				dialog.setVisible(true);
 
 			} catch (InvalidKeyException | SignatureException e1) {
 				System.out.println(e1.getMessage());
@@ -276,10 +311,15 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			Object cipher = e.getSource();
 			if (cipher instanceof JComboBox<?>) {
-				
+
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) cipher;
 				cipherController.select((String) cb.getSelectedItem());
+
+				publicField.setText(cipherController.getPublicKey());
+				privateField.setText(cipherController.getPrivateKey());
+				modulePField.setText(cipherController.getModuleP());
+				randomKField.setText(cipherController.getRandomK());
 
 				cipherBtn.setEnabled(true);
 			}
@@ -290,7 +330,7 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			Object signer = e.getSource();
 			if (signer instanceof JComboBox<?>) {
-				
+
 				@SuppressWarnings("unchecked")
 				JComboBox<String> cb = (JComboBox<String>) signer;
 				signerController.select((String) cb.getSelectedItem());

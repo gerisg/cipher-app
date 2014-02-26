@@ -110,8 +110,8 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		// Generated components
 		resultsModelTbl = new DefaultTableModel(columnNames, 0);
 		resultsTbl = new JTable(resultsModelTbl);
-		JScrollPane scrollPane = new JScrollPane(resultsTbl);
-		scrollPane.setPreferredSize(new Dimension(1000, 750));
+		JScrollPane scrollPane = new JScrollPane(resultsTbl, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension(780, 480));
 
 		// Generated pane
 		JPanel generatedChainsPane = new JPanel();
@@ -198,14 +198,14 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		resultsTbl.setModel(resultsModelTbl);
 
 		// Size
-		resultsTbl.getColumnModel().getColumn(0).setPreferredWidth(50);
+		resultsTbl.getColumnModel().getColumn(0).setPreferredWidth(30);
 		resultsTbl.getColumnModel().getColumn(0).setMinWidth(20);
-		resultsTbl.getColumnModel().getColumn(1).setPreferredWidth(1000);
-		resultsTbl.getColumnModel().getColumn(1).setMinWidth(800);
-		resultsTbl.getColumnModel().getColumn(2).setPreferredWidth(500);
-		resultsTbl.getColumnModel().getColumn(2).setMinWidth(400);
-
-		resultsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		resultsTbl.getColumnModel().getColumn(1).setPreferredWidth(500);
+		resultsTbl.getColumnModel().getColumn(1).setMinWidth(100);
+		resultsTbl.getColumnModel().getColumn(2).setPreferredWidth(230);
+		resultsTbl.getColumnModel().getColumn(2).setMinWidth(100);
+		
+		resultsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
 	private void goNextTab() {

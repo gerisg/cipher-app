@@ -32,4 +32,16 @@ public interface Cifrable extends IComponent {
 	// Decifra un texto cifrado
 	public String decryptText(String encryptedMsg) throws InvalidKeyException;
 
+	// Clave privada en texto
+	public String getPrivateKey();
+
+	// Clave publica en texto
+	public String getPublicKey();
+
+	// Obtener modulo P
+	public BigInteger getModuleP();
+
+	// Obtener random K
+	public BigInteger getRandomK();
+
 }

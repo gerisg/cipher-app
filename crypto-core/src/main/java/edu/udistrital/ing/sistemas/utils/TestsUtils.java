@@ -83,7 +83,7 @@ public class TestsUtils {
 	 */
 	private void initPool(int size) {
 
-		for (int i = 0; i < size; i++) {
+		for (int i = 1; i <= size; i++) {
 			Vector<String> vector = new Vector<String>(17);
 			vector.add(String.valueOf(i));
 

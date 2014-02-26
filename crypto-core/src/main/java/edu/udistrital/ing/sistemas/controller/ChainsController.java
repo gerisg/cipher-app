@@ -111,4 +111,8 @@ public class ChainsController {
 		this.chain = chains.get(index);
 	}
 
+	public void removeChain() {
+		this.chain = "";
+	}
+
 }

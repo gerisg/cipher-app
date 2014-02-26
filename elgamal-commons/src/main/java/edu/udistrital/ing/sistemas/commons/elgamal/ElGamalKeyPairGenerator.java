@@ -19,6 +19,9 @@ public class ElGamalKeyPairGenerator extends KeyPairGeneratorSpi {
 	private int mStrength;
 	private SecureRandom mSecureRandom;
 
+	private BigInteger p;
+	private BigInteger k;
+
 	public void initialize(int strength, SecureRandom random) {
 		mStrength = strength;
 		mSecureRandom = random;
@@ -35,9 +38,9 @@ public class ElGamalKeyPairGenerator extends KeyPairGeneratorSpi {
 			mSecureRandom = new SecureRandom();
 		}
 
-		BigInteger p = new BigInteger(mStrength, 99, mSecureRandom);
+		p = new BigInteger(mStrength, 99, mSecureRandom);
 		BigInteger g = new BigInteger(mStrength - 1, mSecureRandom);
-		BigInteger k = new BigInteger(mStrength - 1, mSecureRandom);
+		k = new BigInteger(mStrength - 1, mSecureRandom);
 		BigInteger y = g.modPow(k, p);
 
 		ElGamalPublicKey publicKey = new ElGamalPublicKey(y, g, p);
@@ -51,9 +54,9 @@ public class ElGamalKeyPairGenerator extends KeyPairGeneratorSpi {
 		// p es el módulo
 		// g es el generador
 		// k es número aleatoreo para la clave privada
-		BigInteger p = calculateP(q);
+		p = calculateP(q);
 		BigInteger g = calculateG(p);
-		BigInteger k = calculateK(p);
+		k = calculateK(p);
 		BigInteger y = g.modPow(k, p);
 
 		ElGamalPublicKey publicKey = new ElGamalPublicKey(y, g, p);
@@ -114,4 +117,19 @@ public class ElGamalKeyPairGenerator extends KeyPairGeneratorSpi {
 
 		return true;
 	}
+
+	/**
+	 * Es el módulo
+	 */
+	public BigInteger getP() {
+		return p;
+	}
+
+	/**
+	 * Numero aleatorio utilizado para generar las keys
+	 */
+	public BigInteger getK() {
+		return k;
+	}
+
 }

@@ -28,8 +28,8 @@ public class ElgamalSignerTest {
 			Assert.assertEquals(22, signKey.length);
 
 			// Verify signature
-			boolean verified = signer.signVerify(signKey, str);
-			Assert.assertEquals(true, verified);
+			String verified = signer.signVerify(signKey, str);
+			Assert.assertEquals("f822102f4515609fc31927a84c6db7f8", verified);
 
 		} catch (InvalidKeyException | SignatureException e) {
 			Assert.fail("Error validando firma");

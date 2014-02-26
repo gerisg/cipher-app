@@ -22,7 +22,7 @@ public interface Firmable extends IComponent {
 	// Firma un mensaje
 	public byte[] signKey(String str) throws InvalidKeyException, SignatureException;
 
-	// Verifica la firma de un mensaje
-	public boolean signVerify(byte[] signedb, String mensaje) throws InvalidKeyException, SignatureException;
+	// Verifica la firma de un mensaje retornando el HASH
+	public String signVerify(byte[] signedb, String mensaje) throws InvalidKeyException, SignatureException;
 
 }

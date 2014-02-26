@@ -27,14 +27,14 @@ public class OverlappingTemplateParser extends CommonParser {
 				while ((line = br.readLine()) != null) {
 
 					if (line.contains(SUCCESS))
-						results.add(new String("1"));
+						results.add(new String("1.000000"));
 
 					else if (line.contains(FAILURE))
-						results.add(new String("0"));
+						results.add(new String("0.000000"));
 				}
 
 			} catch (IOException e) {
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 			}
 		}
 

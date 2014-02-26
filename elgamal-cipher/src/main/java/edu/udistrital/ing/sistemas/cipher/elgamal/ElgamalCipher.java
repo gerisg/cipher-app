@@ -18,10 +18,11 @@ public class ElgamalCipher implements Cifrable {
 	private ElGamalEncryption encrypt;
 	private ElGamalPrivateKey eprik;
 	private ElGamalPublicKey epubk;
+	private ElGamalKeyPairGenerator ekpg;
 
 	public void init(String randomNumber) {
 
-		ElGamalKeyPairGenerator ekpg = new ElGamalKeyPairGenerator();
+		ekpg = new ElGamalKeyPairGenerator();
 		ekpg.initialize(32, new SecureRandom());
 
 		BigInteger seed = new BigInteger(randomNumber);
@@ -34,10 +35,7 @@ public class ElgamalCipher implements Cifrable {
 	public BigInteger[] encryptKey(String key) throws InvalidKeyException {
 		encrypt = new ElGamalEncryption();
 		encrypt.engineInitEncrypt(epubk);
-		BigInteger msgNum = new BigInteger(key);
-		BigInteger[] encryptedKey = encrypt.engineEncrypt(msgNum);
-		System.out.println("Encrypted message key: " + encryptedKey[0] + "," + encryptedKey[1]);
-		return encryptedKey;
+		return encrypt.engineEncrypt(new BigInteger(key));
 	}
 
 	public String encryptText(String message) throws InvalidKeyException {
@@ -59,5 +57,25 @@ public class ElgamalCipher implements Cifrable {
 	@Override
 	public String getName() {
 		return "Cifrador Elgamal";
+	}
+
+	@Override
+	public String getPrivateKey() {
+		return eprik.toString();
+	}
+
+	@Override
+	public String getPublicKey() {
+		return epubk.toString();
+	}
+
+	@Override
+	public BigInteger getModuleP() {
+		return ekpg.getP();
+	}
+
+	@Override
+	public BigInteger getRandomK() {
+		return ekpg.getK();
 	}
 }

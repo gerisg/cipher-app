@@ -57,7 +57,7 @@ public class SignerController {
 	/**
 	 * Verificar si la firma es válida
 	 */
-	public boolean verify(byte[] key, String msg) throws InvalidKeyException, SignatureException {
+	public String verify(byte[] key, String msg) throws InvalidKeyException, SignatureException {
 		return signer.signVerify(key, msg);
 	}
 

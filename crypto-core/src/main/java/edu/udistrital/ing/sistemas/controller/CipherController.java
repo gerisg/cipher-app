@@ -1,5 +1,6 @@
 package edu.udistrital.ing.sistemas.controller;
 
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,30 @@ public class CipherController {
 	 */
 	public String decryptText(String encrypted) throws InvalidKeyException {
 		return cipher.decryptText(encrypted);
+	}
+
+	/**
+	 * Mostrar clave privada
+	 */
+	public String getPrivateKey() {
+		return cipher.getPrivateKey();
+	}
+
+	/**
+	 * Mostrar clave publica
+	 */
+	public String getPublicKey() {
+		return cipher.getPublicKey();
+	}
+
+	public String getModuleP() {
+		BigInteger moduleP = cipher.getModuleP();
+		return moduleP.toString();
+	}
+
+	public String getRandomK() {
+		BigInteger randomK = cipher.getRandomK();
+		return randomK.toString();
 	}
 
 }
