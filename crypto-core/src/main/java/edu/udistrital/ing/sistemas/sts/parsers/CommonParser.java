@@ -22,7 +22,7 @@ public class CommonParser {
 	static final String FAILURE = "FAILURE";
 	static final String P_VALUE = "p_value";
 
-	static final String TEST_RESULTS_DIR = "experiments/AlgorithmTesting/";
+	public static final String TEST_RESULTS_DIR = "experiments/AlgorithmTesting/";
 	static final String TEST_RESULTS_FILE = "stats.txt";
 
 	private int position = 2;

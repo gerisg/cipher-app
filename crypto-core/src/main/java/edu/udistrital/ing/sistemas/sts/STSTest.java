@@ -1,5 +1,9 @@
 package edu.udistrital.ing.sistemas.sts;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,4 +63,21 @@ public class STSTest {
 
 		return results;
 	}
+
+	public String getReport() throws IOException {
+		return getFile(CommonParser.TEST_RESULTS_DIR + "finalAnalysisReport.txt");
+	}
+
+	public String getFreq() throws IOException {
+		return getFile(CommonParser.TEST_RESULTS_DIR + "freq.txt");
+	}
+
+	private String getFile(String fn) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		List<String> lines = Files.readAllLines(Paths.get(fn), StandardCharsets.UTF_8);
+		for (String line : lines)
+			sb.append(line + "\n");
+		return sb.toString();
+	}
+
 }

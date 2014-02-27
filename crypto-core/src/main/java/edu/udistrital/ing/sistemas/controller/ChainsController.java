@@ -28,8 +28,11 @@ public class ChainsController {
 	private String chain;
 	private List<String> chains;
 
+	private STSTest tests;
+
 	public ChainsController(Map<String, IComponent> components) {
 		generators = filter(components);
+		tests = new STSTest();
 	}
 
 	/**
@@ -96,7 +99,7 @@ public class ChainsController {
 	 * Parsea los resultados de cada test de la herramienta del NIST
 	 */
 	public Map<String, List<String>> getResults() {
-		return new STSTest().parseResults();
+		return tests.parseResults();
 	}
 
 	public List<String> getChains() {
@@ -113,6 +116,14 @@ public class ChainsController {
 
 	public void removeChain() {
 		this.chain = "";
+	}
+
+	public String getFreq() throws IOException {
+		return tests.getFreq();
+	}
+
+	public String getReport() throws IOException {
+		return tests.getReport();
 	}
 
 }

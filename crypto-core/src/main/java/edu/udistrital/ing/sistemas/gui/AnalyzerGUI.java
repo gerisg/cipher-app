@@ -7,12 +7,14 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,6 +41,8 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 	private JTextArea selectedChain;
 	private JTextArea messageArea;
 	private JButton okBtn;
+	private JButton freqBtn;
+	private JButton reportBtn;
 
 	private ChainsController controller;
 
@@ -85,13 +89,25 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		messageArea.setEditable(false);
 		messageArea.setLineWrap(true);
 		JScrollPane messagesScrollPane = new JScrollPane(messageArea);
-		messagesScrollPane.setPreferredSize(new Dimension(500, 80));
+		messagesScrollPane.setPreferredSize(new Dimension(350, 80));
+
+		freqBtn = new JButton("Freq");
+		freqBtn.setActionCommand("freq");
+		freqBtn.addActionListener(this);
+		freqBtn.setEnabled(true);
+
+		reportBtn = new JButton("Report");
+		reportBtn.setActionCommand("report");
+		reportBtn.addActionListener(this);
+		reportBtn.setEnabled(true);
 
 		// Test errors pane
 		JPanel testErrorsPane = new JPanel();
 		testErrorsPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		testErrorsPane.add(new JLabel("Errors and Warnings: "));
 		testErrorsPane.add(messagesScrollPane);
+		testErrorsPane.add(freqBtn);
+		testErrorsPane.add(reportBtn);
 
 		// Main pane
 		JPanel pane = new JPanel();
@@ -118,9 +134,50 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 			break;
 
 		case "use_chain":
+
 			goNextTab();
 			break;
+
+		case "freq":
+			try {
+
+				showDialog(controller.getFreq(), "freq.txt");
+
+			} catch (IOException e1) {
+				System.out.println(e1.getMessage());
+			}
+
+			break;
+
+		case "report":
+			try {
+
+				showDialog(controller.getReport(), "finalAnalysisReport.txt");
+
+			} catch (IOException e1) {
+				System.out.println(e1.getMessage());
+			}
+
+			break;
 		}
+	}
+
+	private void showDialog(String freq, String title) {
+		JTextArea areaFreq = new JTextArea(freq);
+
+		JScrollPane scrollPane = new JScrollPane(areaFreq, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(new Dimension(700, 500));
+
+		JPanel pane = new JPanel();
+		pane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		pane.add(scrollPane);
+
+		JDialog dialog = new JDialog();
+		dialog.setTitle(title);
+		dialog.add(pane);
+		dialog.setSize(700, 500);
+		dialog.setLocation(0, 0);
+		dialog.setVisible(true);
 	}
 
 	private void showTestResults(Map<String, List<String>> results) {
