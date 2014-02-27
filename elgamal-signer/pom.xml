@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>edu.udistrital.ing.sistemas</groupId>
 		<artifactId>crypto</artifactId>
-		<version>1.2</version>
+		<version>1.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>elgamal-signer</artifactId>
 	<name>ElGamal Signer Component</name>
@@ -14,12 +14,12 @@
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>crypto-commons</artifactId>
-			<version>1.2</version>
+			<version>1.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>elgamal-commons</artifactId>
-			<version>1.2</version>
+			<version>1.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
