@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>edu.udistrital.ing.sistemas</groupId>
 		<artifactId>crypto</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>1.2</version>
 	</parent>
 	<artifactId>crypto-core</artifactId>
 	<name>Crypto Core</name>
@@ -25,17 +25,17 @@
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>acwa-generator</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>elgamal-cipher</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>elgamal-signer</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2</version>
 		</dependency>
 	</dependencies>
 	<build>
