@@ -40,7 +40,8 @@ public class GeneratorGUI extends Frame implements ActionListener {
 	private JButton generateBtn;
 	private JButton analyzeBtn;
 	private JComboBox<String> generatorList;
-	private NumberFormatter formatter;
+	private NumberFormatter colFormatter;
+	private NumberFormatter rowFormatter;
 	private JTable resultsTbl;
 	private DefaultTableModel resultsModelTbl;
 
@@ -54,10 +55,14 @@ public class GeneratorGUI extends Frame implements ActionListener {
 	public JPanel createComponent() {
 
 		// Formatter
-		formatter = new NumberFormatter(NumberFormat.getInstance());
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0);
-		formatter.setMaximum(1000000);
+		colFormatter = new NumberFormatter(NumberFormat.getInstance());
+		colFormatter.setValueClass(Integer.class);
+		colFormatter.setMinimum(1);
+		colFormatter.setMaximum(1000000);
+		rowFormatter = new NumberFormatter(NumberFormat.getInstance());
+		rowFormatter.setValueClass(Integer.class);
+		rowFormatter.setMinimum(1);
+		rowFormatter.setMaximum(3000);
 
 		// Dimension
 		Dimension dimensionTxt = new Dimension(50, 20);
@@ -69,11 +74,11 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		columnNames.add("ENTERO");
 
 		// Top bar components
-		rowsTxt = new JFormattedTextField(formatter);
+		rowsTxt = new JFormattedTextField(rowFormatter);
 		rowsTxt.setPreferredSize(dimensionTxt);
 		rowsTxt.setText("100");
 
-		columnsTxt = new JFormattedTextField(formatter);
+		columnsTxt = new JFormattedTextField(colFormatter);
 		columnsTxt.setPreferredSize(dimensionTxt);
 		columnsTxt.setText("1000");
 
@@ -137,8 +142,8 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		case "generate":
 			try {
 				// Load rows, columns values
-				rows = (Integer) formatter.stringToValue(rowsTxt.getText());
-				columns = (Integer) formatter.stringToValue(columnsTxt.getText());
+				rows = (Integer) rowFormatter.stringToValue(rowsTxt.getText());
+				columns = (Integer) colFormatter.stringToValue(columnsTxt.getText());
 
 				// Generate chains
 				controller.generate(generatorName, rows, columns);
@@ -204,7 +209,7 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		resultsTbl.getColumnModel().getColumn(1).setMinWidth(100);
 		resultsTbl.getColumnModel().getColumn(2).setPreferredWidth(230);
 		resultsTbl.getColumnModel().getColumn(2).setMinWidth(100);
-		
+
 		resultsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
