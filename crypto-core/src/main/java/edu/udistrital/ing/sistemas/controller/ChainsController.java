@@ -25,7 +25,7 @@ public class ChainsController {
 	private Generable generator;
 	private Map<String, IComponent> generators;
 
-	private String chain;
+	private Chain chain;
 	private List<String> chains;
 
 	private STSTest tests;
@@ -106,16 +106,44 @@ public class ChainsController {
 		return this.chains;
 	}
 
-	public String getChain() {
+	public Chain getChain() {
 		return chain;
 	}
 
 	public void setChain(int index) {
-		this.chain = chains.get(index);
+		this.chain = new Chain(index + 1, chains.get(index));
 	}
 
 	public void removeChain() {
-		this.chain = "";
+		this.chain = null;
+	}
+
+	public class Chain {
+
+		private String text;
+		private int index;
+
+		public Chain(int index, String text) {
+			this.index = index;
+			this.text = text;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public void setIndex(int index) {
+			this.index = index;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public void setText(String text) {
+			this.text = text;
+		}
+
 	}
 
 	public String getFreq() throws IOException {

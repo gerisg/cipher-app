@@ -24,6 +24,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import edu.udistrital.ing.sistemas.controller.ChainsController.Chain;
 import edu.udistrital.ing.sistemas.controller.CipherController;
 import edu.udistrital.ing.sistemas.controller.SignerController;
 
@@ -34,6 +35,7 @@ public class CryptoGUI extends Frame implements ActionListener {
 	private CipherController cipherController;
 	private SignerController signerController;
 
+	private JComboBox<String> cipherList;
 	private JLabel gField;
 	private JLabel publicField;
 	private JLabel privateField;
@@ -62,7 +64,7 @@ public class CryptoGUI extends Frame implements ActionListener {
 	public Component createComponent() {
 
 		// Options components
-		JComboBox<String> cipherList = new JComboBox<String>(cipherController.getList());
+		cipherList = new JComboBox<String>(cipherController.getList());
 		cipherList.setSelectedIndex(-1);
 		cipherList.setActionCommand("select_cipher");
 		cipherList.addActionListener(this);
@@ -226,9 +228,11 @@ public class CryptoGUI extends Frame implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "change_tab":
 
+			cleanGUI();
+
 			// Guarda la cadena seleccionada
-			String chainSelected = (String) e.getSource();
-			gField.setText(chainSelected);
+			Chain chainSelected = (Chain) e.getSource();
+			gField.setText(chainSelected.getIndex() + " - " + chainSelected.getText());
 			gField.setVisible(true);
 
 			break;
@@ -340,5 +344,16 @@ public class CryptoGUI extends Frame implements ActionListener {
 
 			break;
 		}
+	}
+
+	private void cleanGUI() {
+
+		cipherList.setSelectedIndex(0);
+
+		// Text area
+		String empty = new String();
+		msgArea.setText(empty);
+		cipherArea.setText(empty);
+		unCipherArea.setText(empty);
 	}
 }
