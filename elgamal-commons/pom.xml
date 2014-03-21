@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>edu.udistrital.ing.sistemas</groupId>
 		<artifactId>crypto</artifactId>
-		<version>1.3-SNAPSHOT</version>
+		<version>1.3</version>
 	</parent>
 	<artifactId>elgamal-commons</artifactId>
 	<name>ElGamal Commons</name>
