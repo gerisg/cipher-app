@@ -16,6 +16,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -45,6 +46,7 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 	private JButton reportBtn;
 
 	private ChainsController controller;
+	private List<Integer> invalidChains;
 
 	public AnalyzerGUI(ChainsController controller) {
 		this.controller = controller;
@@ -74,7 +76,14 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		topBarPane.add(okBtn);
 
 		// Test results components
-		testsModelTbl = new DefaultTableModel();
+		testsModelTbl = new DefaultTableModel() {
+			private static final long serialVersionUID = 3778467886741762872L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		testsTbl = new JTable(testsModelTbl);
 		JScrollPane scrollPane = new JScrollPane(testsTbl, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(780, 350));
@@ -135,7 +144,11 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 
 		case "use_chain":
 
-			goNextTab();
+			if (invalidChains.contains(controller.getChain().getIndex() - 1))
+				JOptionPane.showMessageDialog(null, "La cadena seleccionada no aprueba los tests", "Cadena no válida", JOptionPane.ERROR_MESSAGE);
+			else
+				goNextTab();
+
 			break;
 
 		case "freq":
@@ -188,6 +201,9 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		Vector<Vector<String>> data = testUtils.getData();
 		Vector<String> columns = testUtils.getColumnNames();
 
+		// Invalid chains
+		invalidChains = testUtils.getFailures();
+
 		// Errors Message
 		StringBuilder message = new StringBuilder();
 		Map<String, String> errors = testUtils.getErrors();
@@ -211,7 +227,7 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 				controller.setChain(e.getFirstIndex());
 
 				// Show chain selected
-				selectedChain.setText(controller.getChain());
+				selectedChain.setText(controller.getChain().getText());
 
 				// Enable OK button
 				okBtn.setEnabled(true);

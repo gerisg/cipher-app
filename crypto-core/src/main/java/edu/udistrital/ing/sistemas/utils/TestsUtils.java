@@ -102,4 +102,9 @@ public class TestsUtils {
 	public Map<String, String> getErrors() {
 		return errors;
 	}
+
+	public List<Integer> getFailures() {
+		return failures;
+	}
+
 }
