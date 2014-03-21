@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -144,7 +145,8 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 
 		case "use_chain":
 
-			if (invalidChains.contains(controller.getChain().getIndex() - 1))
+			int chainSelected = controller.getChain().getIndex() - 1;
+			if (invalidChains.contains(chainSelected))
 				JOptionPane.showMessageDialog(null, "La cadena seleccionada no aprueba los tests", "Cadena no válida", JOptionPane.ERROR_MESSAGE);
 			else
 				goNextTab();
@@ -218,19 +220,28 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		testsTbl.setModel(testsModelTbl);
 		testsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		testsTbl.getColumnModel().getColumn(columns.size() - 1).setCellRenderer(color);
-		testsTbl.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+		ListSelectionModel lsm = testsTbl.getSelectionModel();
+		lsm.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		lsm.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 
+				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+
+				if (lsm.isSelectionEmpty())
+					return;
+
 				// Save chain selected on table
-				controller.setChain(e.getFirstIndex());
+				controller.setChain(lsm.getMinSelectionIndex());
 
 				// Show chain selected
 				selectedChain.setText(controller.getChain().getText());
 
 				// Enable OK button
 				okBtn.setEnabled(true);
+
 			}
 		});
 	}
