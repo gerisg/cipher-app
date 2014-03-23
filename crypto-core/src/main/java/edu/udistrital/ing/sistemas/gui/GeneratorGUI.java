@@ -15,11 +15,15 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.NumberFormatter;
 
@@ -29,6 +33,9 @@ import edu.udistrital.ing.sistemas.utils.ChainsUtils;
 public class GeneratorGUI extends Frame implements ActionListener {
 
 	private static final long serialVersionUID = -4898957220768717522L;
+
+	private static final int MAX_ROWS = 3000;
+	private static final String DEFAULT_ROWS = "100";
 
 	public static int rows = 100;
 	public static int columns = 1000;
@@ -57,12 +64,8 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		// Formatter
 		colFormatter = new NumberFormatter(NumberFormat.getInstance());
 		colFormatter.setValueClass(Integer.class);
-		colFormatter.setMinimum(1);
-		colFormatter.setMaximum(1000000);
 		rowFormatter = new NumberFormatter(NumberFormat.getInstance());
 		rowFormatter.setValueClass(Integer.class);
-		rowFormatter.setMinimum(1);
-		rowFormatter.setMaximum(3000);
 
 		// Dimension
 		Dimension dimensionTxt = new Dimension(50, 20);
@@ -77,6 +80,22 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		rowsTxt = new JFormattedTextField(rowFormatter);
 		rowsTxt.setPreferredSize(dimensionTxt);
 		rowsTxt.setText("100");
+		rowsTxt.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				errorMsg();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// Nothing
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// Nothing
+			}
+		});
 
 		columnsTxt = new JFormattedTextField(colFormatter);
 		columnsTxt.setPreferredSize(dimensionTxt);
@@ -104,9 +123,9 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		// Top bar pane
 		JPanel topBarPane = new JPanel();
 		topBarPane.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		topBarPane.add(new JLabel("Rows: "));
+		topBarPane.add(new JLabel("Filas: "));
 		topBarPane.add(rowsTxt);
-		topBarPane.add(new JLabel("Columns: "));
+		topBarPane.add(new JLabel("Columnas: "));
 		topBarPane.add(columnsTxt);
 		topBarPane.add(generatorList);
 		topBarPane.add(generateBtn);
@@ -211,6 +230,25 @@ public class GeneratorGUI extends Frame implements ActionListener {
 		resultsTbl.getColumnModel().getColumn(2).setMinWidth(100);
 
 		resultsTbl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	}
+
+	private void errorMsg() {
+
+		Runnable run = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					int value = (Integer) rowFormatter.stringToValue(rowsTxt.getText());
+					if (value > MAX_ROWS) {
+						JOptionPane.showMessageDialog(null, "Ingrese un valor de filas menor a " + MAX_ROWS, "Generador de cadenas", JOptionPane.ERROR_MESSAGE);
+						rowsTxt.setText(DEFAULT_ROWS);
+					}
+				} catch (ParseException e1) {
+					rowsTxt.setText(DEFAULT_ROWS);
+				}
+			}
+		};
+		SwingUtilities.invokeLater(run);
 	}
 
 	private void goNextTab() {

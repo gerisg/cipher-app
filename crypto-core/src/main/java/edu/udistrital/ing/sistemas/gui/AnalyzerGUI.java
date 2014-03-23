@@ -114,7 +114,7 @@ public class AnalyzerGUI extends Frame implements ActionListener {
 		// Test errors pane
 		JPanel testErrorsPane = new JPanel();
 		testErrorsPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		testErrorsPane.add(new JLabel("Errors and Warnings: "));
+		testErrorsPane.add(new JLabel("Errores: "));
 		testErrorsPane.add(messagesScrollPane);
 		testErrorsPane.add(freqBtn);
 		testErrorsPane.add(reportBtn);
