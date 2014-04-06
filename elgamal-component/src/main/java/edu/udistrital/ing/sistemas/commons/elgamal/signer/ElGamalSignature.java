@@ -10,9 +10,8 @@ import java.security.SecureRandom;
 import java.security.SignatureException;
 import java.security.SignatureSpi;
 
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPrivateKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPrivateKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPublicKey;
 
 /**
  * ElGamal Signature Method
@@ -23,7 +22,8 @@ import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
  */
 public class ElGamalSignature extends SignatureSpi {
 
-	protected ElGamalKey mKey;
+	protected ElGamalPrivateKey mPrivateKey;
+	protected ElGamalPublicKey mPublicKey;
 	protected ByteArrayOutputStream mOut;
 	protected BigInteger kOne = BigInteger.valueOf(1);
 
@@ -32,7 +32,7 @@ public class ElGamalSignature extends SignatureSpi {
 		if (!(key instanceof ElGamalPublicKey))
 			throw new InvalidKeyException("Invalid ElGamalPublicKey.");
 
-		mKey = (ElGamalKey) key;
+		mPublicKey = (ElGamalPublicKey) key;
 		mOut = new ByteArrayOutputStream();
 	}
 
@@ -41,7 +41,7 @@ public class ElGamalSignature extends SignatureSpi {
 		if (!(key instanceof ElGamalPrivateKey))
 			throw new InvalidKeyException("Invalid ElGamalPrivateKey.");
 
-		mKey = (ElGamalKey) key;
+		mPrivateKey = (ElGamalPrivateKey) key;
 		mOut = new ByteArrayOutputStream();
 	}
 
@@ -55,9 +55,9 @@ public class ElGamalSignature extends SignatureSpi {
 
 	public byte[] engineSign() throws SignatureException {
 
-		BigInteger x = ((ElGamalPrivateKey) mKey).getK();
-		BigInteger g = mKey.getG();
-		BigInteger p = mKey.getP();
+		BigInteger x = mPrivateKey.getK();
+		BigInteger g = mPrivateKey.getG();
+		BigInteger p = mPrivateKey.getP();
 		BigInteger pminusone = p.subtract(kOne);
 
 		BigInteger k;
@@ -87,9 +87,9 @@ public class ElGamalSignature extends SignatureSpi {
 
 	public boolean engineVerify(byte[] sigBytes) throws SignatureException {
 
-		BigInteger y = ((ElGamalPublicKey) mKey).getY();
-		BigInteger g = mKey.getG();
-		BigInteger p = mKey.getP();
+		BigInteger y = mPublicKey.getY();
+		BigInteger g = mPublicKey.getG();
+		BigInteger p = mPublicKey.getP();
 
 		int modulusLength = (p.bitLength() + 7) / 8;
 		byte[] aBytes = new byte[modulusLength];

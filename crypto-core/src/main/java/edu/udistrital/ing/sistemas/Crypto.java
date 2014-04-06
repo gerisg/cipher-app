@@ -63,11 +63,9 @@ public class Crypto {
 
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(".").resolve("components"))) {
 
-			for (Path path : directoryStream) {
-				System.out.println(path.getFileName());
+			for (Path path : directoryStream)
 				for (IComponent component : createFrom(path.toFile()))
 					components.put(component.getType(), component);
-			}
 
 		} catch (IOException | InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);
@@ -84,10 +82,11 @@ public class Crypto {
 
 		Iterator<Class<?>> it = classes.iterator();
 		while (it.hasNext()) {
+
 			IComponent component = (IComponent) it.next().newInstance();
 			components.add(component);
 
-			System.out.println(component.getName() + " " + component.getType());
+			System.out.println("Load " + component.getType() + " component: " + component.getName());
 		}
 
 		return components;
@@ -200,7 +199,11 @@ public class Crypto {
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				createGUI();
+				try {
+					createGUI();
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 	}

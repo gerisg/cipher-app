@@ -1,10 +1,11 @@
 #!/bin/bash
 mvn clean install
 mvn package appassembler:assemble
-cd target/crypto/bin
+cd target/crypto
 mkdir components
-cp ../../../../elgamal-component/target/*.jar  components/
-cp ../../../../acwa-component/target/*.jar  components/
+cp ../../../elgamal-component/target/*.jar  components/
+cp ../../../acwa-component/target/*.jar  components/
+chmod +x bin/crypto
 chmod +x assess
-sh crypto
+bin/crypto
 cd ../../

@@ -2,14 +2,10 @@ package edu.udistrital.ing.sistemas.commons.elgamal.cipher;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.util.StringTokenizer;
 
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPrivateKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPublicKey;
 
 /**
  * ElGamal Encryption Method
@@ -20,41 +16,15 @@ import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
  */
 public class ElGamalEncryption {
 
-	private ElGamalKey mKey;
+	private ElGamalPublicKey mKey;
 	private BigInteger kOne = BigInteger.valueOf(1);
 
 	public void engineInitEncrypt(PublicKey key) throws InvalidKeyException {
+
 		if (!(key instanceof ElGamalPublicKey))
 			throw new InvalidKeyException("Invalid ElGamalPublicKey.");
-		mKey = (ElGamalKey) key;
-	}
 
-	public void engineInitDecrypt(PrivateKey key) throws InvalidKeyException {
-		if (!(key instanceof ElGamalPrivateKey))
-			throw new InvalidKeyException("Invalid ElGamalPrivateKey.");
-		mKey = (ElGamalKey) key;
-	}
-
-	public BigInteger[] engineEncrypt(BigInteger M) {
-
-		BigInteger y = ((ElGamalPublicKey) mKey).getY();
-		BigInteger g = mKey.getG();
-		BigInteger p = mKey.getP();
-
-		BigInteger k;
-		do {
-			k = new BigInteger(p.bitLength() - 1, new SecureRandom());
-		} while (k.gcd(p).equals(kOne) == false);
-
-		BigInteger a = g.modPow(k, p);
-		BigInteger temp = y.modPow(k, p);
-		BigInteger C = (M.multiply(temp)).mod(p);
-
-		BigInteger[] result = new BigInteger[2];
-		result[0] = a;
-		result[1] = C;
-
-		return result;
+		mKey = (ElGamalPublicKey) key;
 	}
 
 	/**
@@ -78,29 +48,26 @@ public class ElGamalEncryption {
 		return sb.toString();
 	}
 
-	public String engineTextDecrypt(String c) {
+	public BigInteger[] engineEncrypt(BigInteger M) {
 
-		StringBuilder plain = new StringBuilder();
-		BigInteger[] temp = new BigInteger[2];
-
-		StringTokenizer st = new StringTokenizer(c, "(),");
-		while (st.hasMoreTokens()) {
-			temp[0] = new BigInteger(st.nextToken());
-			temp[1] = new BigInteger(st.nextToken());
-			plain.append((char) (engineDecrypt(temp)).intValue());
-		}
-
-		return plain.toString();
-	}
-
-	public BigInteger engineDecrypt(BigInteger[] result) {
-
-		BigInteger k = ((ElGamalPrivateKey) mKey).getK();
+		BigInteger y = mKey.getY();
+		BigInteger g = mKey.getG();
 		BigInteger p = mKey.getP();
-		BigInteger a = result[0];
-		BigInteger c = result[1];
-		BigInteger temp = a.modPow(k, p).modInverse(p);
 
-		return c.multiply(temp).mod(p);
+		BigInteger k;
+		do {
+			k = new BigInteger(p.bitLength() - 1, new SecureRandom());
+		} while (k.gcd(p).equals(kOne) == false);
+
+		BigInteger a = g.modPow(k, p);
+		BigInteger temp = y.modPow(k, p);
+		BigInteger C = (M.multiply(temp)).mod(p);
+
+		BigInteger[] result = new BigInteger[2];
+		result[0] = a;
+		result[1] = C;
+
+		return result;
 	}
+
 }

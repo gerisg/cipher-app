@@ -6,9 +6,9 @@ import java.security.KeyPair;
 import java.security.SecureRandom;
 import java.security.SignatureException;
 
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalKeyPairGenerator;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPrivateKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalKeyPairGenerator;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPrivateKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPublicKey;
 import edu.udistrital.ing.sistemas.commons.elgamal.utils.MD5;
 import edu.udistrital.ing.sistemas.components.Firmable;
 

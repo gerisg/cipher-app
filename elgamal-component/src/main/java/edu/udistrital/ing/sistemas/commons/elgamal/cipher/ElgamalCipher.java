@@ -5,9 +5,9 @@ import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.SecureRandom;
 
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalKeyPairGenerator;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPrivateKey;
-import edu.udistrital.ing.sistemas.commons.elgamal.utils.ElGamalPublicKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalKeyPairGenerator;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPrivateKey;
+import edu.udistrital.ing.sistemas.commons.elgamal.ElGamalPublicKey;
 import edu.udistrital.ing.sistemas.components.Cifrable;
 
 /**
@@ -16,9 +16,11 @@ import edu.udistrital.ing.sistemas.components.Cifrable;
 public class ElgamalCipher implements Cifrable {
 
 	private ElGamalEncryption encrypt;
+	private ElGamalDecryption decrypt;
+
+	private ElGamalKeyPairGenerator ekpg;
 	private ElGamalPrivateKey eprik;
 	private ElGamalPublicKey epubk;
-	private ElGamalKeyPairGenerator ekpg;
 
 	public void init(String randomNumber) {
 
@@ -33,25 +35,35 @@ public class ElgamalCipher implements Cifrable {
 	}
 
 	public BigInteger[] encryptKey(String key) throws InvalidKeyException {
+
 		encrypt = new ElGamalEncryption();
 		encrypt.engineInitEncrypt(epubk);
+
 		return encrypt.engineEncrypt(new BigInteger(key));
 	}
 
 	public String encryptText(String message) throws InvalidKeyException {
+
 		encrypt = new ElGamalEncryption();
 		encrypt.engineInitEncrypt(epubk);
+
 		return encrypt.engineTextEncrypt(message);
 	}
 
 	public BigInteger decryptKey(BigInteger[] encryptedMsg) throws InvalidKeyException {
-		encrypt.engineInitDecrypt(eprik);
-		return encrypt.engineDecrypt(encryptedMsg);
+
+		decrypt = new ElGamalDecryption();
+		decrypt.engineInitDecrypt(eprik);
+
+		return decrypt.engineDecrypt(encryptedMsg);
 	}
 
 	public String decryptText(String encryptedMsg) throws InvalidKeyException {
-		encrypt.engineInitDecrypt(eprik);
-		return encrypt.engineTextDecrypt(encryptedMsg);
+
+		decrypt = new ElGamalDecryption();
+		decrypt.engineInitDecrypt(eprik);
+
+		return decrypt.engineTextDecrypt(encryptedMsg);
 	}
 
 	@Override

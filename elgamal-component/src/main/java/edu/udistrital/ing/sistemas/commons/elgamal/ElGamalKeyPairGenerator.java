@@ -1,4 +1,4 @@
-package edu.udistrital.ing.sistemas.commons.elgamal.utils;
+package edu.udistrital.ing.sistemas.commons.elgamal;
 
 import java.math.BigInteger;
 import java.security.KeyPair;

@@ -33,6 +33,10 @@ public class ChainsController {
 
 	public ChainsController(Map<Type, IComponent> components) {
 		generators = filter(components);
+
+		if (generators.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"generador\"");
+
 		tests = new STSTest();
 	}
 

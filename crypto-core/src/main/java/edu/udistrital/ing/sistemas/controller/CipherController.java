@@ -25,6 +25,9 @@ public class CipherController {
 
 	public CipherController(Map<Type, IComponent> components) {
 		ciphers = filter(components);
+		
+		if (ciphers.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"cifrador\"");
 	}
 
 	/**

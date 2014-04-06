@@ -18,6 +18,9 @@ public class SignerController {
 
 	public SignerController(Map<Type, IComponent> components) {
 		signers = filter(components);
+
+		if (signers.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"firmador\"");
 	}
 
 	/**
