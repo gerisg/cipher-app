@@ -9,25 +9,26 @@ import java.util.Random;
 
 import edu.udistrital.ing.sistemas.components.Firmable;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.components.IComponent.Type;
 
 public class SignerController {
 
 	private Firmable signer;
 	private Map<String, IComponent> signers;
 
-	public SignerController(Map<String, IComponent> components) {
+	public SignerController(Map<Type, IComponent> components) {
 		signers = filter(components);
 	}
 
 	/**
 	 * Filtra sólo firmadores
 	 */
-	private Map<String, IComponent> filter(Map<String, IComponent> components) {
+	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
 		Map<String, IComponent> filtered = new HashMap<>();
 
-		for (Entry<String, IComponent> entry : components.entrySet())
-			if (entry.getKey().contains("signer"))
-				filtered.put(entry.getKey(), entry.getValue());
+		for (Entry<Type, IComponent> entry : components.entrySet())
+			if (entry.getKey().equals(Type.signer))
+				filtered.put(entry.getValue().getName(), entry.getValue());
 
 		return filtered;
 	}

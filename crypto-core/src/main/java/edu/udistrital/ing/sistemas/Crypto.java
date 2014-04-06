@@ -3,7 +3,17 @@ package edu.udistrital.ing.sistemas;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -13,16 +23,15 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.udistrital.ing.sistemas.cipher.elgamal.ElgamalCipher;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.components.IComponent.Type;
 import edu.udistrital.ing.sistemas.controller.ChainsController;
 import edu.udistrital.ing.sistemas.controller.CipherController;
 import edu.udistrital.ing.sistemas.controller.SignerController;
-import edu.udistrital.ing.sistemas.generator.acwa.GeneradorACWA;
 import edu.udistrital.ing.sistemas.gui.AnalyzerGUI;
 import edu.udistrital.ing.sistemas.gui.CryptoGUI;
 import edu.udistrital.ing.sistemas.gui.GeneratorGUI;
-import edu.udistrital.ing.sistemas.signer.elgamal.ElgamalSigner;
+import edu.udistrital.ing.sistemas.utils.JarScanner;
 
 /**
  * Clase principal de la aplicación "Crypto", esta se encarga de: <br />
@@ -42,19 +51,44 @@ public class Crypto {
 	private SignerController signerController;
 
 	private Crypto() {
-		Map<String, IComponent> components = registerComponents();
+		Map<Type, IComponent> components = loadComponents();
 
 		generatorController = new ChainsController(components);
 		cipherController = new CipherController(components);
 		signerController = new SignerController(components);
 	}
 
-	private Map<String, IComponent> registerComponents() {
-		Map<String, IComponent> components = new HashMap<>();
+	private Map<Type, IComponent> loadComponents() {
+		Map<Type, IComponent> components = new HashMap<>();
 
-		components.put("acwa-generator", new GeneradorACWA());
-		components.put("elgamal-cipher", new ElgamalCipher());
-		components.put("elgamal-signer", new ElgamalSigner());
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(".").resolve("components"))) {
+
+			for (Path path : directoryStream) {
+				System.out.println(path.getFileName());
+				for (IComponent component : createFrom(path.toFile()))
+					components.put(component.getType(), component);
+			}
+
+		} catch (IOException | InstantiationException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+
+		return components;
+	}
+
+	public List<IComponent> createFrom(File sparFile) throws InstantiationException, IllegalAccessException {
+		List<IComponent> components = new ArrayList<>();
+
+		JarScanner jarScanner = new JarScanner(sparFile);
+		Collection<Class<?>> classes = jarScanner.findAssignableTo(IComponent.class);
+
+		Iterator<Class<?>> it = classes.iterator();
+		while (it.hasNext()) {
+			IComponent component = (IComponent) it.next().newInstance();
+			components.add(component);
+
+			System.out.println(component.getName() + " " + component.getType());
+		}
 
 		return components;
 	}

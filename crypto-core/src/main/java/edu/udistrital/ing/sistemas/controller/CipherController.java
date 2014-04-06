@@ -9,6 +9,7 @@ import java.util.Random;
 
 import edu.udistrital.ing.sistemas.components.Cifrable;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.components.IComponent.Type;
 
 /**
  * 
@@ -22,19 +23,19 @@ public class CipherController {
 	private Cifrable cipher;
 	private Map<String, IComponent> ciphers;
 
-	public CipherController(Map<String, IComponent> components) {
+	public CipherController(Map<Type, IComponent> components) {
 		ciphers = filter(components);
 	}
 
 	/**
 	 * Filtra sólo cifradores
 	 */
-	private Map<String, IComponent> filter(Map<String, IComponent> components) {
+	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
 		Map<String, IComponent> filtered = new HashMap<>();
 
-		for (Entry<String, IComponent> entry : components.entrySet())
-			if (entry.getKey().contains("cipher"))
-				filtered.put(entry.getKey(), entry.getValue());
+		for (Entry<Type, IComponent> entry : components.entrySet())
+			if (entry.getKey().equals(Type.cipher))
+				filtered.put(entry.getValue().getName(), entry.getValue());
 
 		return filtered;
 	}

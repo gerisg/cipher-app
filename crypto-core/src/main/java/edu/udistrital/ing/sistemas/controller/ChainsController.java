@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import edu.udistrital.ing.sistemas.components.Generable;
 import edu.udistrital.ing.sistemas.components.IComponent;
+import edu.udistrital.ing.sistemas.components.IComponent.Type;
 import edu.udistrital.ing.sistemas.sts.STSTest;
 import edu.udistrital.ing.sistemas.utils.RunProcess;
 
@@ -30,7 +31,7 @@ public class ChainsController {
 
 	private STSTest tests;
 
-	public ChainsController(Map<String, IComponent> components) {
+	public ChainsController(Map<Type, IComponent> components) {
 		generators = filter(components);
 		tests = new STSTest();
 	}
@@ -38,12 +39,12 @@ public class ChainsController {
 	/**
 	 * Filtra sólo generadores de cadenas
 	 */
-	private Map<String, IComponent> filter(Map<String, IComponent> components) {
+	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
 		Map<String, IComponent> filtered = new HashMap<>();
 
-		for (Entry<String, IComponent> entry : components.entrySet())
-			if (entry.getKey().contains("generator"))
-				filtered.put(entry.getKey(), entry.getValue());
+		for (Entry<Type, IComponent> entry : components.entrySet())
+			if (entry.getKey().equals(Type.generator))
+				filtered.put(entry.getValue().getName(), entry.getValue());
 
 		return filtered;
 	}

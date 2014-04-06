@@ -14,9 +14,6 @@ import java.security.InvalidKeyException;
  */
 public interface Cifrable extends IComponent {
 
-	// Devuelve el nombre del cifrador
-	public String getName();
-
 	// Inicialización de variables
 	public void init(String randomNumber);
 

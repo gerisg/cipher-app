@@ -6,10 +6,8 @@
 	<version>1.5-SNAPSHOT</version>
 	<name>Crypto</name>
 	<modules>
-		<module>elgamal-commons</module>
-		<module>elgamal-cipher</module>
-		<module>elgamal-signer</module>
-		<module>acwa-generator</module>
+		<module>elgamal-component</module>
+		<module>acwa-component</module>
 		<module>crypto-core</module>
 		<module>crypto-commons</module>
 	</modules>

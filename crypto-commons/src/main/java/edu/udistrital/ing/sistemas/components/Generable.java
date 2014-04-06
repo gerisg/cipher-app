@@ -11,9 +11,8 @@ package edu.udistrital.ing.sistemas.components;
  */
 public interface Generable extends IComponent {
 
-	public String getNombre();
-
 	public void generarSecuenciasAleatorias(int rows, int columns);
 
 	public String getAbsoluteRoute();
+
 }

@@ -14,8 +14,6 @@ import java.security.SignatureException;
  */
 public interface Firmable extends IComponent {
 
-	public String getName();
-
 	// Inicialización de variables
 	public void init(String randomNumber);
 
@@ -24,5 +22,5 @@ public interface Firmable extends IComponent {
 
 	// Verifica la firma de un mensaje retornando el HASH
 	public String signVerify(byte[] signedb, String mensaje) throws InvalidKeyException, SignatureException;
-
+	
 }
