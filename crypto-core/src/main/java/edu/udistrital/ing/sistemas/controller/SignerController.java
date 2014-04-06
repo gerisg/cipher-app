@@ -3,8 +3,8 @@ package edu.udistrital.ing.sistemas.controller;
 import java.security.InvalidKeyException;
 import java.security.SignatureException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import edu.udistrital.ing.sistemas.components.Firmable;
@@ -16,24 +16,22 @@ public class SignerController {
 	private Firmable signer;
 	private Map<String, IComponent> signers;
 
-	public SignerController(Map<Type, IComponent> components) {
-		signers = filter(components);
-
-		if (signers.isEmpty())
-			throw new RuntimeException("Debe existir al menos un componente \"firmador\"");
+	public SignerController(List<IComponent> components) {
+		filter(components);
 	}
 
 	/**
 	 * Filtra sólo firmadores
 	 */
-	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
-		Map<String, IComponent> filtered = new HashMap<>();
+	private void filter(List<IComponent> components) {
+		signers = new HashMap<>();
 
-		for (Entry<Type, IComponent> entry : components.entrySet())
-			if (entry.getKey().equals(Type.signer))
-				filtered.put(entry.getValue().getName(), entry.getValue());
+		for (IComponent component : components)
+			if (component.getType().equals(Type.signer))
+				signers.put(component.getName(), component);
 
-		return filtered;
+		if (signers.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"firmador\"");
 	}
 
 	/**

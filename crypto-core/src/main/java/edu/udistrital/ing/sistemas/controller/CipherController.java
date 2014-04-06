@@ -3,8 +3,8 @@ package edu.udistrital.ing.sistemas.controller;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import edu.udistrital.ing.sistemas.components.Cifrable;
@@ -23,24 +23,22 @@ public class CipherController {
 	private Cifrable cipher;
 	private Map<String, IComponent> ciphers;
 
-	public CipherController(Map<Type, IComponent> components) {
-		ciphers = filter(components);
-		
-		if (ciphers.isEmpty())
-			throw new RuntimeException("Debe existir al menos un componente \"cifrador\"");
+	public CipherController(List<IComponent> components) {
+		filter(components);
 	}
 
 	/**
 	 * Filtra sólo cifradores
 	 */
-	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
-		Map<String, IComponent> filtered = new HashMap<>();
+	private void filter(List<IComponent> components) {
+		ciphers = new HashMap<>();
 
-		for (Entry<Type, IComponent> entry : components.entrySet())
-			if (entry.getKey().equals(Type.cipher))
-				filtered.put(entry.getValue().getName(), entry.getValue());
+		for (IComponent component : components)
+			if (component.getType().equals(Type.cipher))
+				ciphers.put(component.getName(), component);
 
-		return filtered;
+		if (ciphers.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"cifrador\"");
 	}
 
 	/**

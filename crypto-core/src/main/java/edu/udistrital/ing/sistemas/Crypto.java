@@ -11,10 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -24,7 +22,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.udistrital.ing.sistemas.components.IComponent;
-import edu.udistrital.ing.sistemas.components.IComponent.Type;
 import edu.udistrital.ing.sistemas.controller.ChainsController;
 import edu.udistrital.ing.sistemas.controller.CipherController;
 import edu.udistrital.ing.sistemas.controller.SignerController;
@@ -51,21 +48,21 @@ public class Crypto {
 	private SignerController signerController;
 
 	private Crypto() {
-		Map<Type, IComponent> components = loadComponents();
+		List<IComponent> components = loadComponents();
 
 		generatorController = new ChainsController(components);
 		cipherController = new CipherController(components);
 		signerController = new SignerController(components);
 	}
 
-	private Map<Type, IComponent> loadComponents() {
-		Map<Type, IComponent> components = new HashMap<>();
+	private List<IComponent> loadComponents() {
+		List<IComponent> components = new ArrayList<>();
 
 		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Paths.get(".").resolve("components"))) {
 
 			for (Path path : directoryStream)
 				for (IComponent component : createFrom(path.toFile()))
-					components.put(component.getType(), component);
+					components.add(component);
 
 		} catch (IOException | InstantiationException | IllegalAccessException e) {
 			throw new RuntimeException(e);

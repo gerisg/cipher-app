@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import edu.udistrital.ing.sistemas.components.Generable;
 import edu.udistrital.ing.sistemas.components.IComponent;
@@ -31,26 +30,23 @@ public class ChainsController {
 
 	private STSTest tests;
 
-	public ChainsController(Map<Type, IComponent> components) {
-		generators = filter(components);
-
-		if (generators.isEmpty())
-			throw new RuntimeException("Debe existir al menos un componente \"generador\"");
-
+	public ChainsController(List<IComponent> components) {
+		filter(components);
 		tests = new STSTest();
 	}
 
 	/**
 	 * Filtra sólo generadores de cadenas
 	 */
-	private Map<String, IComponent> filter(Map<Type, IComponent> components) {
-		Map<String, IComponent> filtered = new HashMap<>();
+	private void filter(List<IComponent> components) {
+		generators = new HashMap<>();
 
-		for (Entry<Type, IComponent> entry : components.entrySet())
-			if (entry.getKey().equals(Type.generator))
-				filtered.put(entry.getValue().getName(), entry.getValue());
+		for (IComponent component : components)
+			if (component.getType().equals(Type.generator))
+				generators.put(component.getName(), component);
 
-		return filtered;
+		if (generators.isEmpty())
+			throw new RuntimeException("Debe existir al menos un componente \"generador\"");
 	}
 
 	/**
