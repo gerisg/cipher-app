@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>edu.udistrital.ing.sistemas</groupId>
 		<artifactId>crypto</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.5</version>
 	</parent>
 	<artifactId>acwa-component</artifactId>
 	<name>ACWA Component</name>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>edu.udistrital.ing.sistemas</groupId>
 			<artifactId>crypto-commons</artifactId>
-			<version>1.5-SNAPSHOT</version>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
